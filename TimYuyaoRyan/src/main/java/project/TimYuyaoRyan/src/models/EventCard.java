@@ -1,4 +1,4 @@
-package project.TimYuyaoRyan;
+package project.TimYuyaoRyan.src.models;
 
 public class EventCard extends Card {
     //Event cards do not work as well with the standard format and will require custom events for when they are played in the game.

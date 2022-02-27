@@ -1,4 +1,4 @@
-package project.TimYuyaoRyan;
+package project.TimYuyaoRyan.src.models;
 
 public class AllyCard extends Card {
     public AllyCard(String name) {

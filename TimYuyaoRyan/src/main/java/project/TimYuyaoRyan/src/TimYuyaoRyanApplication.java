@@ -1,4 +1,5 @@
 package project.TimYuyaoRyan.src;
+import project.TimYuyaoRyan.src.models.*; //Temporary until adjusted to fit with MVC
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

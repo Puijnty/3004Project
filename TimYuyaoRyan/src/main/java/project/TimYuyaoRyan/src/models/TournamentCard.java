@@ -1,4 +1,4 @@
-package project.TimYuyaoRyan;
+package project.TimYuyaoRyan.src.models;
 
 public class TournamentCard extends Card {
     public TournamentCard(String name) {

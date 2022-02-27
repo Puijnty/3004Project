@@ -1,4 +1,4 @@
-package project.TimYuyaoRyan;
+package project.TimYuyaoRyan.src.models;
 import java.util.ArrayList;
 import java.util.Collections;
 

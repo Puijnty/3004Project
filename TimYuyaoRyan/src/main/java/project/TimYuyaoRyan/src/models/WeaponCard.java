@@ -1,4 +1,4 @@
-package project.TimYuyaoRyan;
+package project.TimYuyaoRyan.src.models;
 
 public class WeaponCard extends Card {
     public WeaponCard(String name) {

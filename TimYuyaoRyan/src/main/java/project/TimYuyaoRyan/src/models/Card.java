@@ -1,4 +1,4 @@
-package project.TimYuyaoRyan;
+package project.TimYuyaoRyan.src.models;
 
 public class Card {
     EffectGenerator eg = new EffectGenerator(); //Creates the effects that the card should have when played

@@ -1,4 +1,4 @@
-package project.TimYuyaoRyan;
+package project.TimYuyaoRyan.src.models;
 
 public class EffectGenerator {
     String condition; //Should be able to be used later to determine if a card is powered up. Maybe a method?
