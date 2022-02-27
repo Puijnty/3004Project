@@ -1,20 +1,37 @@
 package project.TimYuyaoRyan;
 
 public class Card {
-    TitleGenerator tg = new TitleGenerator(); //The title of the card
     EffectGenerator eg = new EffectGenerator(); //Creates the effects that the card should have when played
     SummaryGenerator sg = new SummaryGenerator(); //Short summary for viewing when in discard pile
-    String type;
+    String cardType;
+    String title;
+    String effectType;
+    String conditionalType;
+    int effectPotency;
+    int conditionalPotency;
+    boolean conditionalCard = false;
+    String conditionalText;
 
-    public void genEffect(){
-        //To be used when played, prints the card name in use and starts the effect
-        tg.create(this);
-        eg.create(this);
+
+    public void genSummary(){
+        //Sets up card summary using generator
+        sg.create(this);
+    }
+
+    public int invoke(gamestate){
+        //Will become the method through which the system determines the card effect
+        if(conditionalCard){
+            if(eg.getCondition(gamestate)) {
+                //Must become much more complex
+                return conditionalPotency;
+            }
+        }
+        return effectPotency;
     }
 
     public String getType(){
         //Used to determine if this type of card can be played in the current scenario
-        return type;
+        return cardType;
     }
 
     public String getSummary(){

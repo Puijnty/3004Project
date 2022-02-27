@@ -5,16 +5,16 @@ public class AdventureCardGenerator implements CardGenerator {
     public Card publish(String name, String effect) {
         Card card = null;
         if(effect == "foe"){
-            card = new FoeCard();
+            card = new FoeCard(name);
         }
         else if(effect == "weapon"){
-            card = new WeaponCard();
+            card = new WeaponCard(name);
         }
         else if(effect == "ally"){
-            card = new AllyCard();
+            card = new AllyCard(name);
         }
         else if(effect == "amour"){
-            card = new AmourCard();
+            card = new AmourCard(name);
         }
         else if(effect == "test"){
             card = new TestCard("Test of " + name);
