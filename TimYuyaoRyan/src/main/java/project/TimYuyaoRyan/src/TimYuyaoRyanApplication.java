@@ -1,4 +1,4 @@
-package project.TimYuyaoRyan;
+package project.TimYuyaoRyan.src;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
