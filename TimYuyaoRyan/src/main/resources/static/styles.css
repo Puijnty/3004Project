@@ -1,0 +1,26 @@
+
+.discard{
+    background: #aaa;
+    top: 5%;
+    left:93%;
+    position: absolute;
+    text-align: center;
+}
+
+.playArea{
+    background: #aaa;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin:auto;
+    text-align: center;
+}
+
+.hand{
+    background: #aaa;
+    width: 100%;
+    top: 90%;
+    margin:auto;
+    position: absolute;
+    text-align: center;
+
