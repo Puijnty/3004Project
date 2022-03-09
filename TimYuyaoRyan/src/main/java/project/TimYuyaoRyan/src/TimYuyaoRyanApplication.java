@@ -18,23 +18,48 @@ public class TimYuyaoRyanApplication {
 		CardDeck advDeck = new CardDeck();
 		CardDeck storyDeck = new CardDeck();
 		CardDeck discardDeck = new CardDeck();
-		advDeck.add(advGen.publish("Robber Knight", "foe"));
-		advDeck.add(advGen.publish("Saxons", "foe"));
-		advDeck.add(advGen.publish("Boar", "foe"));
-		advDeck.add(advGen.publish("Thieves", "foe"));
-		advDeck.add(advGen.publish("Green Knight", "foe"));
-		advDeck.add(advGen.publish("Evil Knight", "foe"));
-		advDeck.add(advGen.publish("Saxon Knight", "foe"));
-		advDeck.add(advGen.publish("Dragon", "foe"));
-		advDeck.add(advGen.publish("Giant", "foe"));
-		advDeck.add(advGen.publish("Mordred", "foe"));
 
-		advDeck.add(advGen.publish("Horse", "weapon"));
-		advDeck.add(advGen.publish("Sword", "weapon"));
-		advDeck.add(advGen.publish("Dagger", "weapon"));
-		advDeck.add(advGen.publish("Excalibur", "weapon"));
-		advDeck.add(advGen.publish("Lance", "weapon"));
-		advDeck.add(advGen.publish("Battle-ax", "weapon"));
+		//Foes spawn in large number and are thus generated with
+		advDeck.add(advGen.publish("Dragon", "foe"));
+		for(int i = 0; i < 2; i++){
+			advDeck.add(advGen.publish("Giant", "foe"));
+			advDeck.add(advGen.publish("Green Knight", "foe"));
+		}
+		for(int i = 0; i < 4; i++){
+			advDeck.add(advGen.publish("Mordred", "foe"));
+			advDeck.add(advGen.publish("Boar", "foe"));
+		}
+		for(int i = 0; i < 5; i++){
+			advDeck.add(advGen.publish("Saxons", "foe"));
+		}
+		for(int i = 0; i < 6; i++){
+			advDeck.add(advGen.publish("Evil Knight", "foe"));
+		}
+		for(int i = 0; i < 7; i++){
+			advDeck.add(advGen.publish("Robber Knight", "foe"));
+		}
+		for(int i = 0; i < 8; i++){
+			advDeck.add(advGen.publish("Saxon Knight", "foe"));
+			advDeck.add(advGen.publish("Thieves", "foe"));
+		}
+
+		//Weapons spawn in large number and are thus generated with loops
+		for(int i = 0; i < 11; i++){
+			advDeck.add(advGen.publish("Horse", "weapon"));
+		}
+		for(int i = 0; i < 16; i++) {
+			advDeck.add(advGen.publish("Sword", "weapon"));
+		}
+		for(int i = 0; i < 6; i++){
+			advDeck.add(advGen.publish("Dagger", "weapon"));
+			advDeck.add(advGen.publish("Lance", "weapon"));
+		}
+		for(int i = 0; i < 2; i++){
+			advDeck.add(advGen.publish("Excalibur", "weapon"));
+		}
+		for(int i = 0; i < 8; i++){
+			advDeck.add(advGen.publish("Battle-ax", "weapon"));
+		}
 
 		advDeck.add(advGen.publish("Sir Gawain", "ally"));
 		advDeck.add(advGen.publish("King Pellinore", "ally"));
@@ -47,16 +72,25 @@ public class TimYuyaoRyanApplication {
 		advDeck.add(advGen.publish("Sir Lancelot", "ally"));
 		advDeck.add(advGen.publish("Sir Galahad", "ally"));
 
-		advDeck.add(advGen.publish("Amour", "amour"));
+		for(int i = 0; i < 8; i++){
+			advDeck.add(advGen.publish("Amour", "amour"));
+		}
 
 		advDeck.add(advGen.publish("the Questing Beast", "test"));
+		advDeck.add(advGen.publish("the Questing Beast", "test"));
+		advDeck.add(advGen.publish("Temptation", "test"));
 		advDeck.add(advGen.publish("Temptation", "test"));
 		advDeck.add(advGen.publish("Valor", "test"));
+		advDeck.add(advGen.publish("Valor", "test"));
+		advDeck.add(advGen.publish("Morgan Le Fey", "test"));
 		advDeck.add(advGen.publish("Morgan Le Fey", "test"));
 
 		storyDeck.add(storyGen.publish("Journey Through the Enchanted Forest", "quest"));
 		storyDeck.add(storyGen.publish("Vanquish King Arthur's Enemies", "quest"));
+		storyDeck.add(storyGen.publish("Vanquish King Arthur's Enemies", "quest"));
 		storyDeck.add(storyGen.publish("Repel the Saxon Raiders", "quest"));
+		storyDeck.add(storyGen.publish("Repel the Saxon Raiders", "quest"));
+		storyDeck.add(storyGen.publish("Boar Hunt", "quest"));
 		storyDeck.add(storyGen.publish("Boar Hunt", "quest"));
 		storyDeck.add(storyGen.publish("Search for the Questing Beast", "quest"));
 		storyDeck.add(storyGen.publish("Defend the Queen's Honor", "quest"));
@@ -74,7 +108,10 @@ public class TimYuyaoRyanApplication {
 		storyDeck.add(storyGen.publish("Pox", "event"));
 		storyDeck.add(storyGen.publish("Plague", "event"));
 		storyDeck.add(storyGen.publish("King's Recognition", "event"));
+		storyDeck.add(storyGen.publish("King's Recognition", "event"));
 		storyDeck.add(storyGen.publish("Queen's Favor", "event"));
+		storyDeck.add(storyGen.publish("Queen's Favor", "event"));
+		storyDeck.add(storyGen.publish("Court Called to Camelot", "event"));
 		storyDeck.add(storyGen.publish("Court Called to Camelot", "event"));
 		storyDeck.add(storyGen.publish("King's Call to Arms", "event"));
 		storyDeck.add(storyGen.publish("Prosperity Throughout the Realm", "event"));
