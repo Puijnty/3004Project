@@ -11,8 +11,13 @@ public class EffectGenerator {
         condition = c;
         card.conditionalText = c;
     }
+    /*
     public boolean getCondition(gamestate){
         //Checks if the condition to change potency is true and returns that result
         return false;
     }
+
+     */
 }
+
+

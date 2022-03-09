@@ -1,19 +1,43 @@
 var stompClient = null;
+var host=false;
+var id;
 
 function connect() {
-    var socket = new SockJS('/messenger');
-    stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
-        stompClient.subscribe('/test/Reply',
-        function(message) {
-              // incoming message from subscription title
-              //function to deal with said message we know the response
-              displayMessage(JSON.parse(message.body).id);
-              message.ack();
+     var socket = new SockJS('/knights');
+     stompClient = Stomp.over(socket);
+     stompClient.connect({}, function (frame) {
+         console.log('Connected: ' + frame);
+         stompClient.subscribe('/game/playerInfo', function (info) {
+             updatePlayerInfo(JSON.parse(info.body));
+         });
+         stompClient.subscribe('/game/Turn', function (turn) {
+            takeTurn(JSON.parse(turn.body));
+            });
 
-            },{ack: 'client'});
-    });
+     });
+ }
+
+
+function updateConnect(connected){
+    if(connected){
+        $("#connect").hide();
+        if(host){
+            $("#start").show();
+        }
+    }
+}
+
+function setUp(){
+    var getId=new XMLHttpRequest()
+    getId.onload = function(){
+    id=Number(getId.responseText);
+    console.log(id);
+
+    }
+    getId.open("GET", "id");
+    getId.send();
+    $("#start").hide();
+    $("#nextTurn").hide();
 }
 
 function disconnect() {
@@ -23,19 +47,7 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-function displayMessage(text){
-    $("#messages").append("<br>Sever reply: "+text);
-     console.log("appending text: "+text);
-}
-
-function sendMessage(){
-    stompClient.send("/app/test", {},JSON.stringify({'id':'Hello'}));
-    console.log("message sent");
-}
-
-
 $(function(){
     $( "#connect" ).click(function() { connect(); });
-    $( "#disconnect" ).click(function() { disconnect(); });
-    $( "#sender" ).click(function() { sendMessage(); });
     });
+

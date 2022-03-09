@@ -3,15 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="/static/styles.css" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="/webjars/jquery/jquery.min.js"></script>
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="app.js"></script>
     <title>Game</title>
 </head>
 
-<body>
+<body onload="setUp()">
 
+        <button id = "connect">Connect!</button>
+        <button id = "start">Start!</button>
+        <button id = "nextTurn">Finish Turn!</button>
         <div class = "discard">
             <p>discard pile</p>
         </div>
@@ -19,7 +23,7 @@
             <p>play a card</p>
         </div>
         <div class = "hand" >
-            <p>cum</p>
+            <p>hand</p>
         </div>
 
 </body>

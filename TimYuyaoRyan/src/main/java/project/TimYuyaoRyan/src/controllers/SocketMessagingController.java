@@ -9,7 +9,11 @@ import project.TimYuyaoRyan.src.models.*;
 public class SocketMessagingController {
     @MessageMapping("/test")
     @SendTo("/test/Reply")
-    public PlayerInfo playerInfo(){
-           return new PlayerInfo("hello");
-    }
+    public PlayerInfo hello(){return new PlayerInfo(1,"hello");}
+
+    @MessageMapping("/join")
+    @SendTo("/game/playerInfo")//need to make logic for id and  status
+    public PlayerInfo lobby(){return new PlayerInfo(2,"waiting");}
+
+
 }
