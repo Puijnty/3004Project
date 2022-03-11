@@ -10,6 +10,7 @@ public class EffectGenerator {
         card.conditionalPotency = conditionalPotency;
         condition = c;
         card.conditionalText = c;
+        //card.imageName = whatever;
     }
     /*
     public boolean getCondition(gamestate){
@@ -17,7 +18,7 @@ public class EffectGenerator {
         return false;
     }
 
-     */
+    */
 }
 
 

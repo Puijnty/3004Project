@@ -4,34 +4,34 @@ public class QuestCard extends Card {
     public QuestCard(String name) {
         cardType = "quest";
         title = name;
-        if(name == "Journey Through the Enchanted Forest") {
+        if(name == "quest_forest") {
             eg.create(this, "stages", 3, true, "stages", 3, "Foe: Evil Knight");
         }
-        else if(name == "Vanquish King Arthur's Enemies") {
+        else if(name == "quest_vanquish") {
             eg.create(this, "stages", 3, false, "stages", 3, "N/A");
         }
-        else if(name == "Repel the Saxon Raiders") {
+        else if(name == "quest_repel") {
             eg.create(this, "stages", 2, true, "stages", 2, "Foe: All Saxons");
         }
-        else if(name == "Boar Hunt") {
+        else if(name == "quest_hunt") {
             eg.create(this, "stages", 2, true, "stages", 2, "Foe: Boar");
         }
-        else if(name == "Search for the Questing Beast") {
+        else if(name == "quest_quest") {
             eg.create(this, "stages", 4, false, "stages", 4, "N/A");
         }
-        else if(name == "Defend the Queen's Honor") {
+        else if(name == "quest_defend") {
             eg.create(this, "stages", 4, true, "stages", 4, "Foe: All");
         }
-        else if(name == "Slay the Dragon") {
+        else if(name == "quest_slay") {
             eg.create(this, "stages", 3, true, "stages", 3, "Foe: Dragon");
         }
-        else if(name == "Rescue the Fair Maiden") {
+        else if(name == "quest_rescue") {
             eg.create(this, "stages", 3, true, "stages", 3, "Foe: Black Knight");
         }
-        else if(name == "Search for the Holy Grail") {
+        else if(name == "quest_search") {
             eg.create(this, "stages", 5, true, "stages", 5, "Foe: All");
         }
-        else if(name == "Test of the Green Knight") {
+        else if(name == "quest_test") {
             eg.create(this, "stages", 4, true, "stages", 4, "Foe: Green Knight");
         }
     }

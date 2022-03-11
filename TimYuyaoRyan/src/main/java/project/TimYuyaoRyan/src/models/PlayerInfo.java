@@ -11,5 +11,13 @@ public class PlayerInfo {
     public int getId(){
         return id;
     }
+    CardDeck hand = new CardDeck();
 
+    public Card remove(String s) {
+        return hand.remove(s);
+    }
+
+    public void give(Card c){
+        hand.add(c);
+    }
 }

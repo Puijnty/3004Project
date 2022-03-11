@@ -17,7 +17,7 @@ public class AdventureCardGenerator implements CardGenerator {
             card = new AmourCard(name);
         }
         else if(effect == "test"){
-            card = new TestCard("Test of " + name);
+            card = new TestCard(name);
         }
         //Card.genValues();
         return card;

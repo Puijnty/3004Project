@@ -10,6 +10,17 @@ public class CardDeck {
         data.add(c);
     }
 
+    public Card remove(String cardName){
+        for (int i = 0; i < data.size(); i++) {
+            if(data.get(i).title == cardName){
+                Card returnedCard = data.get(i);
+                data.remove(i);
+                return returnedCard;
+            }
+        }
+        return null;
+    }
+
     public Card draw(){
         //Draws a random card and removes it from the deck
         Collections.shuffle(data);
