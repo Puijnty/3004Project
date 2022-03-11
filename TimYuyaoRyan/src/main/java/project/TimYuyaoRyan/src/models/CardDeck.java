@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class CardDeck {
-    ArrayList<Card> data=new ArrayList<Card>();
+    ArrayList<Card> data = new ArrayList<Card>();
 
     public void add(Card c){
         //Adds a new card to the deck
@@ -25,6 +25,7 @@ public class CardDeck {
         //Draws a random card and removes it from the deck
         Collections.shuffle(data);
         Card c = data.get(0);
+        System.out.println(c.title);
         data.remove(0);
         return c;
     }

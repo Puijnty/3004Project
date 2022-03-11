@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import project.TimYuyaoRyan.src.models.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 @Service
 @Scope("application")
@@ -68,10 +69,16 @@ public class GameMaster {
         while(true) {
             //draw 3 adventure cards at the start of your turn
             //players.get(currentTurn).give(advDeck.draw());
+            Scanner input = new Scanner(System.in);
 
             Card c = storyDeck.draw();
             if(c.getType() == "quest"){
                 //Do quest things
+                //Should enter the questing loop and ask if players want to sponsor quests
+                //While we figure this out, it waits on a text input to avoid an infinite loop of drawing cards and emptying the deck
+                //NOTE: When a deck runs out, create method to return all cards to it from the discard pile
+                System.out.println("Temp fix: waiting on console input to run the next turn");
+                String temp = input.nextLine();
             }
             else if(c.getType() == "tournament"){
                 //Do tournament things
