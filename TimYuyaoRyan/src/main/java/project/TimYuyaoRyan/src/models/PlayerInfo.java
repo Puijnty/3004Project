@@ -1,16 +1,21 @@
 package project.TimYuyaoRyan.src.models;
 
 public class PlayerInfo {
-    public PlayerInfo(int id,String status){
+
+    public PlayerInfo(int id,boolean turn){
         this.id = id;
-        this.status=status;
+        this.turn=turn;
     }
+
     private int id;
-    private String status;
-    public String getStatus(){return status;}
+    private boolean turn;
+
+    public boolean isTurn(){return turn;}
+
     public int getId(){
         return id;
     }
+
     CardDeck hand = new CardDeck();
 
     public Card remove(String s) {

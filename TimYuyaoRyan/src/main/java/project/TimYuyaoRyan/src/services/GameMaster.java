@@ -8,7 +8,7 @@ import java.util.ArrayList;
 @Service
 @Scope("application")
 public class GameMaster {
-    ArrayList<PlayerInfo> players;
+    ArrayList<PlayerInfo> players=new ArrayList<PlayerInfo>();
     int currentTurn;
     CardDeck advDeck = new CardDeck();
     CardDeck storyDeck = new CardDeck();
@@ -28,10 +28,12 @@ public class GameMaster {
         String[] arrStr = s.split(",");
         String[] s2 = arrStr[0].split(":");
         String[] s3 = arrStr[1].split(":");
-        Card removedCard = players.get(Integer.parseInt(s2[1])).remove(s3[1]);
+       Card removedCard = players.get(Integer.parseInt(s2[1])).remove(s3[1]);
         if(removedCard != null) {
             discardDeck.add(removedCard);
         }
+
+
     }
 
     public void initialize(){
@@ -75,7 +77,7 @@ public class GameMaster {
                 //Do tournament things
                 //Everyone draws 1 adventure card
                 for (int i = 0; i < players.size(); i++) {
-                    players.get(i).give(advDeck.draw());
+                  //  players.get(i).give(advDeck.draw());
                 }
             }
             else if(c.getType() == "event"){

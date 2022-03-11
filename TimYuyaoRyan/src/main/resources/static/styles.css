@@ -2,25 +2,40 @@
 .discard{
     background: #aaa;
     top: 5%;
-    left:93%;
+    left:85%;
     position: absolute;
     text-align: center;
+}
+.card{
+    width: 10vw;
+
+}
+
+.pile{
+      display: none;
+      position:absolute;
+       overflow:auto;
+}
+
+.discard:hover .pile {
+  display: block;
 }
 
 .playArea{
     background: #aaa;
     position: absolute;
-    top: 50%;
+    top: 30%;
     left: 50%;
     margin:auto;
     text-align: center;
 }
-
+.pa{
+width: 20vw;
+}
 .hand{
-    background: #aaa;
     width: 100%;
-    top: 90%;
+    top: 80%;
     margin:auto;
     position: absolute;
     text-align: center;
-
+}

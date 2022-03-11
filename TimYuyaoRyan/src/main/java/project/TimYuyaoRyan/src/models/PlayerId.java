@@ -11,4 +11,7 @@ public class PlayerId {
     public int getId() {
         return id;
     }
+    public int getNextId(){
+        return nextId;
+    }
 }

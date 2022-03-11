@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class CardDeck {
-    ArrayList<Card> data;
+    ArrayList<Card> data=new ArrayList<Card>();
 
     public void add(Card c){
         //Adds a new card to the deck

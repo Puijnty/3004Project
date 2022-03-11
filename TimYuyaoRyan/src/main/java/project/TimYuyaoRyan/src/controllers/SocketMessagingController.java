@@ -12,18 +12,18 @@ public class SocketMessagingController {
     @Autowired
     private GameMaster gameMaster;
 
-    @MessageMapping("/test")
-    @SendTo("/test/Reply")
-    public PlayerInfo hello(){return new PlayerInfo(1,"hello");}
-
     @MessageMapping("/join")
-    @SendTo("/game/playerInfo")//need to make logic for id and  status
-    public PlayerInfo lobby(){return new PlayerInfo(2,"waiting");}
+    public void joined(String message){
+        if (Integer.parseInt(message)<5) {
+            gameMaster.playerJoins(new PlayerInfo(Integer.parseInt(message), false));
+        }
+    }
 
     @MessageMapping("/start")
     @SendTo("/game/Reply")
     public String start() {
-        if (gameMaster.getNumPlayers() > 2) {
+        if (gameMaster.getNumPlayers() >= 2) {
+            System.out.println("here");
             gameMaster.initialize();
             return "Game Started!";
         }
