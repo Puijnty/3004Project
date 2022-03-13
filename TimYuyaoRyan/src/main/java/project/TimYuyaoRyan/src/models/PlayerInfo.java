@@ -25,4 +25,33 @@ public class PlayerInfo {
     public void give(Card c){
         hand.add(c);
     }
+
+    public int countQuestComponents(){
+        int count = 0;
+        boolean testBool = false;
+        for (int i = 0; i < hand.data.size(); i++) {
+            if(hand.data.get(i).getType() == "foe"){
+                count++;
+            }
+            else if(hand.data.get(i).getType() == "test" && testBool == false){
+                testBool = true;
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int countWeapons(){
+        int count = 0;
+        for (int i = 0; i < hand.data.size(); i++) {
+            if(hand.data.get(i).getType() == "weapon"){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public Card getCard(String name){
+        return hand.get(name);
+    }
 }

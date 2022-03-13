@@ -29,4 +29,15 @@ public class CardDeck {
         data.remove(0);
         return c;
     }
+
+    public Card get(String s){
+        for (int i = 0; i < data.size(); i++) {
+            if(data.get(i).getTitle() == s){
+               return data.get(i);
+            }
+        }
+        System.out.println("Returning a null value from a deck. There is an error in the name of a card send between server and client.");
+        System.out.println("The specific name in question is: " + s);
+        return null;
+    }
 }
