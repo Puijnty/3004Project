@@ -40,4 +40,12 @@ public class CardDeck {
         System.out.println("The specific name in question is: " + s);
         return null;
     }
+
+    public Card next(){
+        return data.get(0);
+    }
+
+    public int getSize(){
+        return data.size();
+    }
 }

@@ -9,6 +9,7 @@ public class PlayerInfo {
 
     private int id;
     private boolean turn;
+    private boolean amour = false;
 
     public boolean isTurn(){return turn;}
 
@@ -49,6 +50,18 @@ public class PlayerInfo {
             }
         }
         return count;
+    }
+
+    public void activateAmour(){
+        amour = true;
+    }
+
+    public void disableAmour(){
+        amour = false;
+    }
+
+    public boolean getAmour(){
+        return amour;
     }
 
     public Card getCard(String name){

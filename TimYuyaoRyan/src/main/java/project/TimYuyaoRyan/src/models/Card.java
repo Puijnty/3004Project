@@ -23,9 +23,15 @@ public class Card {
         return cardType;
     }
 
+    public String getCondition(){
+        return conditionalText;
+    }
+
     public int getPotency(){
         return effectPotency;
     }
+
+    public int getConditionalPotency() { return conditionalPotency; }
 
     public String getTitle(){
         return title;
