@@ -10,6 +10,7 @@ public class PlayerInfo {
     private int id;
     private boolean turn;
     private boolean amour = false;
+    private int shields = 0;
 
     public boolean isTurn(){return turn;}
 
@@ -66,5 +67,19 @@ public class PlayerInfo {
 
     public Card getCard(String name){
         return hand.get(name);
+    }
+
+    public int countBattle() {
+        int count = 0;
+        for (int i = 0; i < hand.data.size(); i++) {
+            if(hand.data.get(i).getType() == "weapon" || hand.data.get(i).getType() == "ally" || hand.data.get(i).getType() == "amour"){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public void award(int i) {
+        shields += i;
     }
 }

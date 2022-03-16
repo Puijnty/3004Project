@@ -194,30 +194,54 @@ public class GameMaster {
                                     questerStrength += 10;
                                 }
                                 System.out.println("Your strength is " + questerStrength + ", would you like to play a card to enhance this?");
-                                /*String temp = input.nextLine();
-                                while(temp == "Y" && players.get(questers.get(j)).countWeapons() >= 1) {
+                                Card questerCard = stageCard;
+                                String temp = input.nextLine();
+                                while(temp == "Y" && players.get(questers.get(j)).countBattle() >= 1) {
                                     //Allows the attachment of multiple weapons
-                                    while (stageCard.getType() != "weapon") {
-                                        System.out.println("What weapon would you like to attach?");
+                                    while (questerCard.getType() != "weapon" && questerCard.getType() != "amour" && questerCard.getType() != "ally") {
+                                        System.out.println("What would you like to play?");
                                         temp = input.nextLine();
-                                        stageCard = players.get(sponsor).getCard(temp);
+                                        questerCard = players.get(questers.get(j)).getCard(temp);
                                     }
-                                    stageDeck.add(stageCard);
-                                    players.get(sponsor).remove(stageCard.getTitle());
+                                    if(questerCard.getType() == "weapon") {
+                                        questerStrength += questerCard.getPotency();
+                                    }
+                                    else if(questerCard.getType() == "ally"){
+                                        //To be implemented
+                                    }
+                                    else if(questerCard.getType() == "amour" && players.get(questers.get(j)).getAmour() == false){
+                                        questerStrength += 10;
+                                        players.get(questers.get(j)).activateAmour();
+                                    }
+                                    else{
+                                        System.out.println("Cannot play an amour card while amour is already active!");
+                                    }
+                                    players.get(questers.get(j)).remove(stageCard.getTitle());
                                     sponsorCards++;
                                     System.out.println("Would you like to add another weapon?");
                                     temp = input.nextLine();
                                 }
                                 if(temp=="Y"){
                                     //Will only fire if the player wishes to play a weapon and has none in hand
-                                    System.out.println("No weapons left in hand!");
-                                }*/
+                                    System.out.println("No playable cards left in hand!");
+                                }
+                                if(questerStrength >= foeStrength){
+                                    System.out.println("The quester is victorious!");
+                                }
+                                else{
+                                    System.out.println("The foe is victorious!");
+                                    questers.remove(j);
+                                }
                             }
-
                         }
                         else if(stageCard.getType() == "test"){
 
                         }
+                    }
+                    //Quest is completed! All players have been eliminated or the quest is done
+                    System.out.println("Quest complete!");
+                    for (int j = 0; j < questers.size(); j++) {
+                        players.get(questers.get(j)).award(1);
                     }
                 }
                 else{
