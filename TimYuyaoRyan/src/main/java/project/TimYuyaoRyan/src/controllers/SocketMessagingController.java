@@ -1,32 +1,61 @@
 package project.TimYuyaoRyan.src.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.stereotype.Controller;
-import project.TimYuyaoRyan.src.models.*;
+import project.TimYuyaoRyan.src.models.PlayerInfo;
 import project.TimYuyaoRyan.src.services.GameMaster;
 
+
+@Scope(scopeName = "websocket", proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Controller
 public class SocketMessagingController {
     @Autowired
     private GameMaster gameMaster;
 
+    private static SimpMessagingTemplate template;
+
+    @Autowired
+    public SocketMessagingController(SimpMessagingTemplate template) {
+        this.template = template;
+    }
+
     @MessageMapping("/join")
     public void joined(String message){
         if (Integer.parseInt(message)<5) {
-            gameMaster.playerJoins(new PlayerInfo(Integer.parseInt(message), false));
+            if(!gameMaster.isLaunched()) {
+                gameMaster.playerJoins(new PlayerInfo(Integer.parseInt(message), false));
+            }
         }
     }
 
     @MessageMapping("/start")
     @SendTo("/game/Reply")
     public String start() {
-        if (gameMaster.getNumPlayers() >= 2) {
-            System.out.println("here");
-            gameMaster.initialize();
-            return "Game Started!";
+        if (!gameMaster.isLaunched()) {
+            if (gameMaster.getNumPlayers() >= 2) {
+                System.out.println("here");
+                gameMaster.initialize();
+                return "Game Started!";
+            }
+            return "Not Enough Players!";
         }
-        return "Not Enough Players!";
+        return "Already Started!";
     }
+
+    public static void sendHand(PlayerInfo p){
+
+        System.out.println("{\"id\":" +p.getId()+ ",\"turn\":" +p.isTurn()+ ",\"cards\":"+p.getHand()+"}");
+        template.convertAndSend("/game/Turn",
+               "{\"id\":" +p.getId()+ ",\"turn\":" +p.isTurn()+ ",\"cards\":"+p.getHand()+"}");
+
+    }
+
+
 }

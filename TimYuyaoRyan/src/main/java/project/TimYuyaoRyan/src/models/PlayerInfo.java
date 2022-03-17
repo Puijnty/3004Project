@@ -8,6 +8,12 @@ public class PlayerInfo {
     }
 
     private int id;
+
+
+    public void setTurn(boolean turn) {
+        this.turn = turn;
+    }
+
     private boolean turn;
 
     public boolean isTurn(){return turn;}
@@ -24,5 +30,9 @@ public class PlayerInfo {
 
     public void give(Card c){
         hand.add(c);
+    }
+
+    public String getHand() {
+        return hand.toString();
     }
 }

@@ -29,4 +29,15 @@ public class CardDeck {
         data.remove(0);
         return c;
     }
+
+    @Override
+    public String toString() {
+        String result="{";
+        for (int i=0;i < data.size();i++){
+            result = result+"\"c"+i+"\":\""+data.get(i).title+"\",";
+        }
+        result=result.substring(0, result.length() - 1)  +"}";
+
+        return result;
+    }
 }

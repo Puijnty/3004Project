@@ -17,7 +17,7 @@ function connect() {
          stompClient.send("/app/join",{},id);
          console.log('Connected: ' + frame);
 
-         stompClient.subscribe('/game/Turn', function (turn) {
+         stompClient.subscribe("/game/Turn", function (turn) {
             takeTurn(JSON.parse(turn.body));
             });
         stompClient.subscribe('/game/Reply', function (message) {
@@ -28,7 +28,17 @@ function connect() {
                             });
      });
  }
-
+function takeTurn(message){
+    console.log("turn message received");
+    if(message.id=id){
+        if(!message.turn){
+            updateHand(message.hand);
+        }
+    }
+}
+function updateHand(hand){
+    console.log(hand);
+}
 
 function updateConnect(){
     $("#connect").hide();

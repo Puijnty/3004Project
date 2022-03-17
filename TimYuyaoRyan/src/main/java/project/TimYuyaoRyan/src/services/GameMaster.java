@@ -1,7 +1,9 @@
 package project.TimYuyaoRyan.src.services;
 
 import org.springframework.context.annotation.Scope;
+
 import org.springframework.stereotype.Service;
+import project.TimYuyaoRyan.src.controllers.SocketMessagingController;
 import project.TimYuyaoRyan.src.models.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -9,6 +11,11 @@ import java.util.Scanner;
 @Service
 @Scope("application")
 public class GameMaster {
+    public boolean isLaunched() {
+        return launched;
+    }
+
+    boolean launched=false;
     ArrayList<PlayerInfo> players=new ArrayList<PlayerInfo>();
     int currentTurn;
     CardDeck advDeck = new CardDeck();
@@ -33,11 +40,11 @@ public class GameMaster {
         if(removedCard != null) {
             discardDeck.add(removedCard);
         }
-
-
     }
 
+
     public void initialize(){
+        launched=true;
         System.out.println("Generating card decks");
         CreateDecks();
 
@@ -52,6 +59,10 @@ public class GameMaster {
             for (int j = 0; j < 12; j++) {
                 players.get(i).give(advDeck.draw());
             }
+
+            SocketMessagingController.sendHand(players.get(i));
+
+
         }
         currentTurn = 0;
         //Game setup complete, begin main loop.
