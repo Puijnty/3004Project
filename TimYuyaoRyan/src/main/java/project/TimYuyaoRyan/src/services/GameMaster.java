@@ -56,6 +56,7 @@ public class GameMaster {
             players.get(i).give(c);
 
             //Give each player 12 adventure cards
+            System.out.println("Giving players starting cards. If there is a crash here, you have more players than there are cards in the deck for them");
             for (int j = 0; j < 12; j++) {
                 players.get(i).give(advDeck.draw());
             }
@@ -82,26 +83,225 @@ public class GameMaster {
             //players.get(currentTurn).give(advDeck.draw());
             Scanner input = new Scanner(System.in);
 
+            CheckDeck(storyDeck);
             Card c = storyDeck.draw();
+            CardDeck stageDeck = new CardDeck();
+            int sponsorCards = 0;
+
             if(c.getType() == "quest"){
                 //Do quest things
                 //Should enter the questing loop and ask if players want to sponsor quests
                 //While we figure this out, it waits on a text input to avoid an infinite loop of drawing cards and emptying the deck
                 //NOTE: When a deck runs out, create method to return all cards to it from the discard pile
-                System.out.println("Temp fix: waiting on console input to run the next turn");
-                String temp = input.nextLine();
+
+                //Ask every player if they wish to sponsor the quest starting with the player whose turn it is
+                //Sponsoring player sets down a foe with weapons for each stage or a test for each stage
+                //All non-sponsors attempt to complete the quest
+                int sponsor = -1;
+                int stages = c.getPotency();
+                boolean testBool = false;
+
+                for (int i = 0; i < players.size(); i++) {
+                    int sponsorRequest = i + currentTurn;
+                    if(sponsorRequest > players.size()){
+                        sponsorRequest -= players.size();
+                    }
+                    players.get(sponsorRequest);
+                    System.out.println("Asking player " + sponsorRequest + " if they wish to sponsor the quest...");
+                    String temp = input.nextLine();
+                    if(temp == "Y" && players.get(sponsorRequest).countQuestComponents() >= stages){
+                        sponsor = sponsorRequest;
+                        i = 10; //Will exit the loop due to being above max players
+                    }
+                    else if(temp == "Y"){
+                        System.out.println("This player does not have enough foe and tests to sponsor this quest!");
+                    }
+                }
+
+                if(sponsor != -1){
+                    for (int i = 0; i < stages; i++) {
+                        //Pick a card for each stage
+                        Card stageCard = c;
+                        //Ensure that the card is the correct type and that no more than one test is played
+                        while(stageCard.getType() != "foe" || (stageCard.getType() != "test" || stageCard.getType() == "test" && testBool == true)){
+                            System.out.println("What would you like to play for stage " + i + "?");
+                            String temp = input.nextLine();
+                            stageCard = players.get(sponsor).getCard(temp);
+                            if(stageCard.getType() == "test" && testBool == true){
+                                System.out.println("Two tests cannot be played in the same quest!");
+
+                            }
+                        }
+                        stageDeck.add(stageCard);
+                        players.get(sponsor).remove(stageCard.getTitle());
+                        sponsorCards++;
+                        if(stageCard.getType() == "test"){
+                            testBool = true;
+                        }
+
+                        //If the card is a foe, ask if you want to add a weapon
+                        if(stageCard.getType() == "foe"){
+                            System.out.println("Would you like to attach a weapon?");
+                            String temp = input.nextLine();
+                            if(temp == "Y" && players.get(sponsor).countWeapons() >= 1) {
+                                //Allows the attachment of multiple weapons
+                                while (temp == "Y" && players.get(sponsor).countWeapons() >= 1) {
+                                    while (stageCard.getType() != "weapon") {
+                                        System.out.println("What weapon would you like to attach?");
+                                        temp = input.nextLine();
+                                        stageCard = players.get(sponsor).getCard(temp);
+                                    }
+                                    stageDeck.add(stageCard);
+                                    players.get(sponsor).remove(stageCard.getTitle());
+                                    sponsorCards++;
+                                    System.out.println("Would you like to add another weapon?");
+                                    temp = input.nextLine();
+                                }
+                            }
+                            if(temp=="Y"){
+                                //Will only fire if the player wishes to play a weapon and has none in hand
+                                System.out.println("No weapons left in hand!");
+                            }
+                        }
+                    }
+
+                    //Quest is fully set up, the number of stages that the quest contains are added to the
+                    // amount of cards the sponsor will draw when the quest is complete
+                    sponsorCards += stages;
+
+                    //Players will now attempt to clear the quest one stage at a time
+                    //Create the list of participants
+                    ArrayList<Integer> questers = new ArrayList<Integer>();
+                    for (int i = 0; i < players.size(); i++) {
+                        if(players.get(i).getId() != sponsor){
+                            questers.add(players.get(i).getId());
+                        }
+                    }
+
+                    for (int i = 0; i < stages; i++) {
+                        Card stageCard = stageDeck.next();
+                        stageDeck.remove(stageCard.getTitle());
+
+                        for (int j = 0; j < questers.size(); j++) {
+                            //At each stage of the quest, each participant still in the quest draws a card
+                            CheckDeck(advDeck);
+                            players.get(questers.get(j)).give(advDeck.draw());
+                        }
+
+                        if(stageCard.getType() == "foe"){
+                            //Read the full strength of the foe based on conditions and weapons
+                            int foeStrength = stageCard.getPotency();
+                            if(stageCard.getTitle() == c.getCondition() || "all" == c.getCondition()){
+                               foeStrength = stageCard.getConditionalPotency();
+                            }
+                            while(stageDeck.next().getType() == "weapon"){
+                                foeStrength += stageDeck.next().getPotency();
+                                stageDeck.remove(stageDeck.next().getTitle());
+                            }
+                            //Loop through players and determine if they can defeat the foe for this stage
+                            for (int j = 0; j < questers.size(); j++) {
+                                int questerStrength = 5;
+                                if(players.get(questers.get(j)).getAmour()){
+                                    questerStrength += 10;
+                                }
+                                System.out.println("Your strength is " + questerStrength + ", would you like to play a card to enhance this?");
+                                Card questerCard = stageCard;
+                                String temp = input.nextLine();
+                                while(temp == "Y" && players.get(questers.get(j)).countBattle() >= 1) {
+                                    //Allows the attachment of multiple weapons
+                                    while (questerCard.getType() != "weapon" && questerCard.getType() != "amour" && questerCard.getType() != "ally") {
+                                        System.out.println("What would you like to play?");
+                                        temp = input.nextLine();
+                                        questerCard = players.get(questers.get(j)).getCard(temp);
+                                    }
+                                    if(questerCard.getType() == "weapon") {
+                                        questerStrength += questerCard.getPotency();
+                                    }
+                                    else if(questerCard.getType() == "ally"){
+                                        //To be implemented
+                                    }
+                                    else if(questerCard.getType() == "amour" && players.get(questers.get(j)).getAmour() == false){
+                                        questerStrength += 10;
+                                        players.get(questers.get(j)).activateAmour();
+                                    }
+                                    else{
+                                        System.out.println("Cannot play an amour card while amour is already active!");
+                                    }
+                                    players.get(questers.get(j)).remove(stageCard.getTitle());
+                                    sponsorCards++;
+                                    System.out.println("Would you like to add another weapon?");
+                                    temp = input.nextLine();
+                                }
+                                if(temp=="Y"){
+                                    //Will only fire if the player wishes to play a weapon and has none in hand
+                                    System.out.println("No playable cards left in hand!");
+                                }
+                                if(questerStrength >= foeStrength){
+                                    System.out.println("The quester is victorious!");
+                                }
+                                else{
+                                    System.out.println("The foe is victorious!");
+                                    questers.remove(j);
+                                }
+                            }
+                        }
+                        else if(stageCard.getType() == "test"){
+
+                        }
+                    }
+                    //Quest is completed! All players have been eliminated or the quest is done
+                    System.out.println("Quest complete!");
+                    for (int j = 0; j < questers.size(); j++) {
+                        players.get(questers.get(j)).award(1);
+                    }
+                }
+                else{
+                    System.out.println("Nobody sponsors the quest!");
+                }
+
+                //Sponsor gains x + y cards where x is the number of stages and y is the number of cards they used to set up the quest
+                for (int i = 0; i < sponsorCards; i++) {
+                    CheckDeck(advDeck);
+                    players.get(sponsor).give(advDeck.draw());
+                }
+                //Disable amour buff at the end of the quest
+                for (int i = 0; i < players.size(); i++) {
+                    players.get(i).disableAmour();
+                }
             }
+
+
             else if(c.getType() == "tournament"){
                 //Do tournament things
                 //Everyone draws 1 adventure card
                 for (int i = 0; i < players.size(); i++) {
-                  //  players.get(i).give(advDeck.draw());
+                    CheckDeck(advDeck);
+                    players.get(i).give(advDeck.draw());
                 }
             }
             else if(c.getType() == "event"){
                 //Do event things
             }
             nextTurn();
+        }
+    }
+
+    private void CheckDeck(CardDeck c){
+        if(c.getSize() == 0){
+            reshuffle();
+        }
+    }
+
+    private void reshuffle(){
+        System.out.println("Reshuffling the deck using the discard pile!");
+        for (int i = 0; i < discardDeck.getSize(); i++) {
+            Card c = discardDeck.draw();
+            if(c.getType() == "tournament" || c.getType() == "quest" || c.getType() == "event"){
+                storyDeck.add(c);
+            }
+            else{
+                advDeck.add(c);
+            }
         }
     }
 

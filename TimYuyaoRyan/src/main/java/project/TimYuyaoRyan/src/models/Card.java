@@ -17,21 +17,24 @@ public class Card {
         //Sets up card summary using generator
         sg.create(this);
     }
-/*
-    public int invoke(gamestate){
-        //Will become the method through which the system determines the card effect
-        if(conditionalCard){
-            if(eg.getCondition(gamestate)) {
-                //Must become much more complex
-                return conditionalPotency;
-            }
-        }
-        return effectPotency;
-    }
-*/
+
     public String getType(){
         //Used to determine if this type of card can be played in the current scenario
         return cardType;
+    }
+
+    public String getCondition(){
+        return conditionalText;
+    }
+
+    public int getPotency(){
+        return effectPotency;
+    }
+
+    public int getConditionalPotency() { return conditionalPotency; }
+
+    public String getTitle(){
+        return title;
     }
 
     public String getSummary(){
