@@ -86,13 +86,12 @@ public class GameMaster {
             CheckDeck(storyDeck);
             Card c = storyDeck.draw();
             CardDeck stageDeck = new CardDeck();
-            int sponsorCards = 0;
 
             if(c.getType() == "quest"){
+                int sponsorCards = 0;
                 //Do quest things
                 //Should enter the questing loop and ask if players want to sponsor quests
                 //While we figure this out, it waits on a text input to avoid an infinite loop of drawing cards and emptying the deck
-                //NOTE: When a deck runs out, create method to return all cards to it from the discard pile
 
                 //Ask every player if they wish to sponsor the quest starting with the player whose turn it is
                 //Sponsoring player sets down a foe with weapons for each stage or a test for each stage
@@ -106,7 +105,7 @@ public class GameMaster {
                     if(sponsorRequest > players.size()){
                         sponsorRequest -= players.size();
                     }
-                    players.get(sponsorRequest);
+                    //players.get(sponsorRequest);
                     System.out.println("Asking player " + sponsorRequest + " if they wish to sponsor the quest...");
                     String temp = input.nextLine();
                     if(temp == "Y" && players.get(sponsorRequest).countQuestComponents() >= stages){
@@ -274,9 +273,152 @@ public class GameMaster {
             else if(c.getType() == "tournament"){
                 //Do tournament things
                 //Everyone draws 1 adventure card
+                ArrayList<Integer> participants = new ArrayList<Integer>();
+
+                //Ask if players wish to compete
                 for (int i = 0; i < players.size(); i++) {
+                    int joinRequest = i + currentTurn;
+                    if(joinRequest > players.size()){
+                        joinRequest -= players.size();
+                    }
+                    //players.get(joinRequest);
+                    System.out.println("Asking player " + joinRequest + " if they wish to join the tourney...");
+                    String temp = input.nextLine();
+                    if(temp == "Y"){
+                        participants.add(joinRequest);
+                    }
+                    else{
+                        System.out.println("This player does not join the tournament!");
+                    }
+                }
+                //Award all participating players 1 card
+                for (int i = 0; i < participants.size(); i++) {
                     CheckDeck(advDeck);
-                    players.get(i).give(advDeck.draw());
+                    players.get(participants.get(i)).give(advDeck.draw());
+                }
+                if(participants.size() > 1){
+                    //All participants choose which cards to play and then reveal to one another at the same time
+                    int playerStrength[] = new int[participants.size()];
+
+                    int originalParticipants = participants.size();
+                    Card tourneyCard = c;
+
+                    //Everyone plays their cards
+                    for (int i = 0; i < participants.size(); i++) {
+                        System.out.println("Would you like to play a card? (player " + players.get(participants.get(i)) + ")");
+                        String temp = input.nextLine();
+                        while(temp == "Y" && players.get(participants.get(i)).countBattle() >= 1) {
+                            //Allows the attachment of multiple weapons
+                            while (tourneyCard.getType() != "weapon" && tourneyCard.getType() != "amour" && tourneyCard.getType() != "ally") {
+                                System.out.println("What would you like to play?");
+                                temp = input.nextLine();
+                                tourneyCard = players.get(participants.get(i)).getCard(temp);
+                            }
+                            if(tourneyCard.getType() == "weapon") {
+                                playerStrength[i] += tourneyCard.getPotency();
+                            }
+                            else if(tourneyCard.getType() == "ally"){
+                                //To be implemented
+                            }
+                            else if(tourneyCard.getType() == "amour" && players.get(participants.get(i)).getAmour() == false){
+                                playerStrength[i] += 10;
+                                players.get(participants.get(i)).activateAmour();
+                            }
+                            else{
+                                System.out.println("Cannot play an amour card while amour is already active!");
+                            }
+                            players.get(participants.get(i)).remove(tourneyCard.getTitle());
+                            System.out.println("Would you like to add another weapon?");
+                            temp = input.nextLine();
+                        }
+                        if(temp=="Y"){
+                            //Will only fire if the player wishes to play a weapon and has none in hand
+                            System.out.println("No playable cards left in hand!");
+                        }
+                    }
+
+                    //Reveal the strongest participant
+                    int topStrength = -1;
+                    for (int i = 0; i < participants.size(); i++) {
+                        if(playerStrength[i] > topStrength){
+                            topStrength = playerStrength[i];
+                        }
+                    }
+                    //Remove all participants that are defeated in round 1
+                    for (int i = 0; i < participants.size(); i++) {
+                        if(playerStrength[i] < topStrength){
+                            participants.remove(i);
+                        }
+                    }
+                    if(participants.size() == 1){
+                        System.out.println("Player " + players.get(participants.get(0)) + " is victorious! They earn " + (c.getPotency() + originalParticipants) + " shields!");
+                    }
+                    else{
+                        //Tiebreaker
+
+                        //Do the whole 'play your cards' thing again
+                        for (int i = 0; i < participants.size(); i++) {
+                            System.out.println("Would you like to play a card? (player " + players.get(participants.get(i)) + ")");
+                            String temp = input.nextLine();
+                            while(temp == "Y" && players.get(participants.get(i)).countBattle() >= 1) {
+                                //Allows the attachment of multiple weapons
+                                while (tourneyCard.getType() != "weapon" && tourneyCard.getType() != "amour" && tourneyCard.getType() != "ally") {
+                                    System.out.println("What would you like to play?");
+                                    temp = input.nextLine();
+                                    tourneyCard = players.get(participants.get(i)).getCard(temp);
+                                }
+                                if(tourneyCard.getType() == "weapon") {
+                                    playerStrength[i] += tourneyCard.getPotency();
+                                }
+                                else if(tourneyCard.getType() == "ally"){
+                                    //To be implemented
+                                }
+                                else if(tourneyCard.getType() == "amour" && players.get(participants.get(i)).getAmour() == false){
+                                    playerStrength[i] += 10;
+                                    players.get(participants.get(i)).activateAmour();
+                                }
+                                else{
+                                    System.out.println("Cannot play an amour card while amour is already active!");
+                                }
+                                players.get(participants.get(i)).remove(tourneyCard.getTitle());
+                                System.out.println("Would you like to add another weapon?");
+                                temp = input.nextLine();
+                            }
+                            if(temp=="Y"){
+                                //Will only fire if the player wishes to play a weapon and has none in hand
+                                System.out.println("No playable cards left in hand!");
+                            }
+                        }
+
+                        topStrength = -1;
+                        for (int i = 0; i < participants.size(); i++) {
+                            if(playerStrength[i] > topStrength){
+                                topStrength = playerStrength[i];
+                            }
+                        }
+                        //Remove all participants that are defeated in round 2
+                        for (int i = 0; i < participants.size(); i++) {
+                            if(playerStrength[i] < topStrength){
+                                participants.remove(i);
+                            }
+                        }
+                        if(participants.size() == 1){
+                            System.out.println("Player " + players.get(participants.get(0)) + " is victorious! They earn " + (c.getPotency() + originalParticipants) + " shields!");
+                        }
+                        else{
+                            System.out.println("The tiebreaker round is still a tie! All participants that won this round earn " + originalParticipants + " shields!");
+                            for (int i = 0; i < participants.size(); i++) {
+                                players.get(participants.get(i)).award(originalParticipants);
+                            }
+                        }
+                    }
+                }
+                else if(participants.size() == 1){
+                    System.out.println("The sole participant gains " + (1 + c.getPotency()) + " shields!");
+                    players.get(participants.get(0)).award(1 + c.getPotency());
+                }
+                else{
+                    System.out.println("Noone dares to compete in the tournament!");
                 }
             }
             else if(c.getType() == "event"){
