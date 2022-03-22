@@ -78,6 +78,7 @@ public class GameMaster {
     }
 
     public void run(){
+        boolean recognition = false;
         while(true) {
             //draw 3 adventure cards at the start of your turn
             //players.get(currentTurn).give(advDeck.draw());
@@ -251,7 +252,10 @@ public class GameMaster {
                     //Quest is completed! All players have been eliminated or the quest is done
                     System.out.println("Quest complete!");
                     for (int j = 0; j < questers.size(); j++) {
-                        players.get(questers.get(j)).award(1);
+                        players.get(questers.get(j)).award(stages);
+                        if(recognition){
+                            players.get(questers.get(j)).award(2);
+                        }
                     }
                 }
                 else{
@@ -267,6 +271,8 @@ public class GameMaster {
                 for (int i = 0; i < players.size(); i++) {
                     players.get(i).disableAmour();
                 }
+                //Disable recognition event at the end of the quest
+                recognition = false;
             }
 
 
@@ -422,7 +428,62 @@ public class GameMaster {
                 }
             }
             else if(c.getType() == "event"){
-                //Do event things
+                //Display event to players
+                System.out.println(c.getSummary());
+                switch(c.getTitle()){
+                    case "event_deed":
+                        //Players with the least shields receive 3 shields
+                        int min_shields = 100;
+                        for (int i = 0; i < players.size(); i++) {
+                            if(players.get(i).getShields() < min_shields){
+                                min_shields = players.get(i).getShields();
+                            }
+                        }
+                        for (int i = 0; i < players.size(); i++) {
+                            if(players.get(i).getShields() == min_shields){
+                                players.get(i).award(3);
+                            }
+                        }
+                        break;
+                    case "event_pox":
+                        //Everyone except the player drawing the card loses 1 shield
+                        for (int i = 0; i < players.size(); i++) {
+                            if(players.get(i).getShields() > 0 && i != currentTurn){
+                                players.get(i).award(-1);
+                            }
+                        }
+                        break;
+                    case "event_plague":
+                        //The player drawing loses 2 shields, cannot go below 0
+                        players.get(currentTurn).award(-2);
+                        if(players.get(currentTurn).getShields() < 0){
+                            players.get(currentTurn).award(0 - players.get(currentTurn).getShields());
+                        }
+                        break;
+                    case "event_recognition":
+                        //The next quest awards 2 extra shields
+                        recognition = true;
+                        break;
+                    case "event_queen":
+                    case "event_prosperity":
+                        //All players draw 2 adventure cards
+                        //Lowest rank players receive 2 adventure cards (but everyone is the lowest rank)
+                        for (int i = 0; i < players.size(); i++) {
+                            CheckDeck(advDeck);
+                            players.get(i).give(advDeck.draw());
+                            CheckDeck(advDeck);
+                            players.get(i).give(advDeck.draw());
+                        }
+                        break;
+                    case "event_court":
+                        //All allies are removed
+                        //There are no allies at the moment so the card does nothing
+                        break;
+                    case "event_calltoarms":
+                        //Highest ranked player (all players) must discard 1 weapon, or 2 foes if unable
+                        //TBD
+                        break;
+                }
             }
             nextTurn();
         }
@@ -532,7 +593,6 @@ public class GameMaster {
         storyDeck.add(storyGen.publish("quest_search", "quest"));
         storyDeck.add(storyGen.publish("quest_test", "quest"));
 
-        /*
         storyDeck.add(storyGen.publish("tournament_camelot", "tournament"));
         storyDeck.add(storyGen.publish("tournament_orkney", "tournament"));
         storyDeck.add(storyGen.publish("tournament_tintagel", "tournament"));
@@ -549,6 +609,6 @@ public class GameMaster {
         storyDeck.add(storyGen.publish("event_court", "event"));
         storyDeck.add(storyGen.publish("event_calltoarms", "event"));
         storyDeck.add(storyGen.publish("event_prosperity", "event"));
-        */
+
     }
 }

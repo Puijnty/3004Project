@@ -93,4 +93,8 @@ public class PlayerInfo {
     public void award(int i) {
         shields += i;
     }
+
+    public int getShields() {
+        return shields;
+    }
 }
