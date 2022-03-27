@@ -64,6 +64,26 @@ public class PlayerInfo {
         return count;
     }
 
+    public int countMaxBid(){
+        //Every card can be discarded for at least 1 big point
+        int bidTotal = hand.data.size() + countFreeBid();
+
+        return bidTotal;
+    }
+
+    public int countFreeBid(){
+        int freeBids = 0;
+        if(amour){
+            freeBids++;
+        }
+        //Free bids to consider once allies are in:
+        //Arthur = 2 bids
+        //Queen guinevere = 3 bids
+        //Queen Iseult = 2 bids (or 4 when tristan is in play)
+        //Pellinore is 4 bids but only on the questing beast quest
+        return freeBids;
+    }
+
     public void activateAmour(){
         amour = true;
     }

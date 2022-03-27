@@ -246,7 +246,64 @@ public class GameMaster {
                             }
                         }
                         else if(stageCard.getType() == "test"){
+                            int minBid = 0;
+                            String temp;
 
+                            //Set a defined min bid when player is alone in a quest
+                            if(questers.size() == 1){
+                                //Questing beast is the only test that will assign a min bid that is not 3
+                                if(c.getTitle() == "quest_quest" && stageCard.getTitle() == "test_quest"){
+                                    minBid = 4;
+                                }
+                                else {
+                                    minBid = 3;
+                                }
+                                //Does the player want to win the test if it is possible?
+                                System.out.println("Will you sacrifice " + minBid + " cards to pass this test?");
+                                temp = input.nextLine();
+                                if (temp == "Y" && players.get(questers.get(0)).countMaxBid() > minBid) {
+                                    int removedCards = players.get(questers.get(0)).countFreeBid();
+                                    while(removedCards <= minBid){
+                                        System.out.println(removedCards + "/" + (minBid+1) + " bids complete");
+                                        System.out.println("Please select a card to remove, player " + players.get(questers.get(0)));
+                                        temp = input.nextLine();
+                                        players.get(questers.get(0)).remove(temp);
+                                    }
+                                    minBid++;
+                                } else {
+                                    System.out.println("The player has failed the test due to lacking possible bids or lack of will.");
+                                    questers.remove(0);
+                                }
+
+                            }
+
+                            while(questers.size() > 1) {
+                                for (int j = 0; j < questers.size(); j++) {
+                                    System.out.println("Player " + players.get(questers.get(j)) + ", will you bid at least " + (minBid + 1) + " cards to overcome this test?");
+                                    System.out.println("Please play any cards that will grant free bids for the next component before responding.");
+                                    //ALLOW PLAYERS TO PLAY ALLY CARDS OR AMOUR CARDS HERE
+                                    temp = input.nextLine();
+                                    if (temp == "Y" && players.get(questers.get(j)).countMaxBid() > minBid) {
+                                        int removedCards = players.get(questers.get(j)).countFreeBid();
+                                        while(removedCards <= minBid){
+                                            System.out.println(removedCards + "/" + (minBid+1) + " bids complete");
+                                            System.out.println("Please select a card to remove, player " + players.get(questers.get(j)));
+                                            temp = input.nextLine();
+                                            players.get(questers.get(j)).remove(temp);
+                                        }
+                                        minBid++;
+                                    } else {
+                                        System.out.println("The player has failed the test due to lacking possible bids or lack of will.");
+                                        questers.remove(j);
+                                    }
+                                }
+                            }
+                            if(questers.size() == 1) {
+                                System.out.println("The test is complete, and only one player remains.");
+                            }
+                            else{
+                                System.out.println("No knight in the realm was worthy of passing this test...");
+                            }
                         }
                     }
                     //Quest is completed! All players have been eliminated or the quest is done
