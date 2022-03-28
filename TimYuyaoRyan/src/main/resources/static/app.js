@@ -28,16 +28,34 @@ function connect() {
                             });
      });
  }
+
 function takeTurn(message){
     console.log("turn message received");
-    if(message.id=id){
+    if(message.id==id){
         if(!message.turn){
-            updateHand(message.hand);
+            updateHand(message.cards);
+        }else{
+            updateHand(message.cards);
+            $("#nextTurn").show()
         }
     }
 }
+
 function updateHand(hand){
-    console.log(hand);
+    $("#hand").empty();
+    Object.keys(hand).forEach(key => {
+      let value = hand[key];
+      var img = $("<img>");
+      img.attr("src","/images/"+value+".png");
+      img.addClass("pc");
+      img.addClass("card");
+      img.attr("id",key);
+      img.on("click",function(){
+         updatePlayArea(img);
+      });
+      $("#hand").append(img);
+    });
+
 }
 
 function updateConnect(){
@@ -48,12 +66,11 @@ function updateConnect(){
     if(id>4) {
         disconnect();
     }
-
 }
 
 function setUp(){
     $("#start").hide();
-    $("#nextTurn").hide();
+    //$("#nextTurn").hide();
 }
 
 function disconnect() {
@@ -71,9 +88,11 @@ function updatePlayArea(card){
         $(".playArea").append(card.removeClass("pc").addClass("pa"));
     }
 }
+
 function start(){
     stompClient.send("/app/start",{},"start!");
 }
+
 function replies(message){
     if(id==1){
         if(message=="Not Enough Players!"){
@@ -81,15 +100,25 @@ function replies(message){
         }
     }else{
         if(message=="Game Started!"){
+            $("#start").hide();
             alert(message);
         }
     }
+}
+function finishTurn(){
+    console.log("boop");
+        if($(".playArea").html()==""){
+           alert.("Play a Card!")
+        }else{
+
+        }
 
 }
 
 $(function(){
     $( "#connect" ).click(function() { connect(); });
     $(".pc").click(function() { updatePlayArea($(this)); });
-     $("#start").click(function(){start(); })
+    $("#start").click(function(){start(); });
+    $("#nextTurn").click(function(){finishTurn();});
     });
 

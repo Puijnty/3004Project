@@ -9,6 +9,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.stereotype.Controller;
+import project.TimYuyaoRyan.src.models.CardDeck;
 import project.TimYuyaoRyan.src.models.PlayerInfo;
 import project.TimYuyaoRyan.src.services.GameMaster;
 
@@ -50,12 +51,21 @@ public class SocketMessagingController {
     }
 
     public static void sendHand(PlayerInfo p){
-
-        System.out.println("{\"id\":" +p.getId()+ ",\"turn\":" +p.isTurn()+ ",\"cards\":"+p.getHand()+"}");
         template.convertAndSend("/game/Turn",
                "{\"id\":" +p.getId()+ ",\"turn\":" +p.isTurn()+ ",\"cards\":"+p.getHand()+"}");
-
     }
 
+    public static void sendDiscard(CardDeck pile){
+        template.convertAndSend("/game/Discard",pile.toString());
+    }
 
+    public static void turnReplies(PlayerInfo p,String message){
+        template.convertAndSend("/game/TurnReplies",
+                "{\"id\":" +p.getId()+ ",\"turn\":" +p.isTurn() + ",\"message\":"+message + ",\"cards\":"+p.getHand()+"}");
+    }
+
+    public static void playTurn(PlayerInfo p,String type,String cardName){
+        template.convertAndSend("/game/Turn",
+                "{\"id\":" +p.getId()+ ",\"turn\":" +p.isTurn()+ ",\"type\":"+ type +",\"card\":"+ cardName+"}");
+    }
 }

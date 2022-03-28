@@ -1,3 +1,9 @@
+.turn{
+
+    top: 65%;
+    left: 60%;
+    position: absolute;
+}
 
 .discard{
     background: #aaa;
@@ -8,7 +14,6 @@
 }
 .card{
     width: 10vw;
-
 }
 
 .pile{
@@ -29,6 +34,7 @@
     margin:auto;
     text-align: center;
 }
+
 .pa{
 width: 20vw;
 }
