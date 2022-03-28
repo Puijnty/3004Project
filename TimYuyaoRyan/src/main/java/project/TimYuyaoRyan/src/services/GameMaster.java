@@ -107,13 +107,13 @@ public class GameMaster {
                         sponsorRequest -= players.size();
                     }
                     //players.get(sponsorRequest);
-                    System.out.println("Asking player " + sponsorRequest + " if they wish to sponsor the quest...");
-                    String temp = input.nextLine();
-                    if(temp == "Y" && players.get(sponsorRequest).countQuestComponents() >= stages){
+                    String message = ("Player " + sponsorRequest + ", would you like to sponsor this quest?");
+                    boolean playerSponsors = SocketMessagingController.askContinue(message, players.get(sponsorRequest));
+                    if(playerSponsors && players.get(sponsorRequest).countQuestComponents() >= stages){
                         sponsor = sponsorRequest;
                         i = 10; //Will exit the loop due to being above max players
                     }
-                    else if(temp == "Y"){
+                    else if(playerSponsors){
                         System.out.println("This player does not have enough foe and tests to sponsor this quest!");
                     }
                 }
@@ -123,13 +123,12 @@ public class GameMaster {
                         //Pick a card for each stage
                         Card stageCard = c;
                         //Ensure that the card is the correct type and that no more than one test is played
-                        while(stageCard.getType() != "foe" || (stageCard.getType() != "test" || stageCard.getType() == "test" && testBool == true)){
-                            System.out.println("What would you like to play for stage " + i + "?");
-                            String temp = input.nextLine();
+                        while(stageCard.getType() != "foe" || (stageCard.getType() != "test" || stageCard.getType() == "test" && testBool)){
+                            String message = "What would you like to play for stage " + i + "?";
+                            String temp = SocketMessagingController.askCard(message, players.get(sponsor));
                             stageCard = players.get(sponsor).getCard(temp);
-                            if(stageCard.getType() == "test" && testBool == true){
+                            if(stageCard.getType() == "test" && testBool){
                                 System.out.println("Two tests cannot be played in the same quest!");
-
                             }
                         }
                         stageDeck.add(stageCard);
@@ -141,24 +140,24 @@ public class GameMaster {
 
                         //If the card is a foe, ask if you want to add a weapon
                         if(stageCard.getType() == "foe"){
-                            System.out.println("Would you like to attach a weapon?");
-                            String temp = input.nextLine();
-                            if(temp == "Y" && players.get(sponsor).countWeapons() >= 1) {
+                            String message = ("Would you like to attach a weapon?");
+                            boolean temp = SocketMessagingController.askContinue(message, players.get(sponsor));
+                            if(temp && players.get(sponsor).countWeapons() >= 1) {
                                 //Allows the attachment of multiple weapons
-                                while (temp == "Y" && players.get(sponsor).countWeapons() >= 1) {
+                                while (temp && players.get(sponsor).countWeapons() >= 1) {
                                     while (stageCard.getType() != "weapon") {
-                                        System.out.println("What weapon would you like to attach?");
-                                        temp = input.nextLine();
-                                        stageCard = players.get(sponsor).getCard(temp);
+                                        message = ("What weapon would you like to attach?");
+                                        message = SocketMessagingController.askCard(message, players.get(sponsor));
+                                        stageCard = players.get(sponsor).getCard(message);
                                     }
                                     stageDeck.add(stageCard);
                                     players.get(sponsor).remove(stageCard.getTitle());
                                     sponsorCards++;
-                                    System.out.println("Would you like to add another weapon?");
-                                    temp = input.nextLine();
+                                    message = ("Would you like to attach another weapon?");
+                                    temp = SocketMessagingController.askContinue(message, players.get(sponsor));
                                 }
                             }
-                            if(temp=="Y"){
+                            if(temp){
                                 //Will only fire if the player wishes to play a weapon and has none in hand
                                 System.out.println("No weapons left in hand!");
                             }
@@ -204,15 +203,15 @@ public class GameMaster {
                                 if(players.get(questers.get(j)).getAmour()){
                                     questerStrength += 10;
                                 }
-                                System.out.println("Your strength is " + questerStrength + ", would you like to play a card to enhance this?");
+                                String message = ("Your strength is " + questerStrength + ", would you like to play a card to enhance this?");
                                 Card questerCard = stageCard;
-                                String temp = input.nextLine();
-                                while(temp == "Y" && players.get(questers.get(j)).countBattle() >= 1) {
+                                boolean temp = SocketMessagingController.askContinue(message, players.get(questers.get(j)));
+                                while(temp && players.get(questers.get(j)).countBattle() >= 1) {
                                     //Allows the attachment of multiple weapons
                                     while (questerCard.getType() != "weapon" && questerCard.getType() != "amour" && questerCard.getType() != "ally") {
-                                        System.out.println("What would you like to play?");
-                                        temp = input.nextLine();
-                                        questerCard = players.get(questers.get(j)).getCard(temp);
+                                        message = ("What would you like to play?");
+                                        message = SocketMessagingController.askCard(message, players.get(questers.get(j)));
+                                        questerCard = players.get(questers.get(j)).getCard(message);
                                     }
                                     if(questerCard.getType() == "weapon") {
                                         questerStrength += questerCard.getPotency();
@@ -220,7 +219,7 @@ public class GameMaster {
                                     else if(questerCard.getType() == "ally"){
                                         //To be implemented
                                     }
-                                    else if(questerCard.getType() == "amour" && players.get(questers.get(j)).getAmour() == false){
+                                    else if(questerCard.getType() == "amour" && !players.get(questers.get(j)).getAmour()){
                                         questerStrength += 10;
                                         players.get(questers.get(j)).activateAmour();
                                     }
@@ -229,10 +228,10 @@ public class GameMaster {
                                     }
                                     players.get(questers.get(j)).remove(stageCard.getTitle());
                                     sponsorCards++;
-                                    System.out.println("Would you like to add another weapon?");
-                                    temp = input.nextLine();
+                                    message = ("Would you like to add another weapon?");
+                                    temp = SocketMessagingController.askContinue(message, players.get(questers.get(j)));
                                 }
-                                if(temp=="Y"){
+                                if(temp){
                                     //Will only fire if the player wishes to play a weapon and has none in hand
                                     System.out.println("No playable cards left in hand!");
                                 }
@@ -247,7 +246,7 @@ public class GameMaster {
                         }
                         else if(stageCard.getType() == "test"){
                             int minBid = 0;
-                            String temp;
+                            boolean temp;
 
                             //Set a defined min bid when player is alone in a quest
                             if(questers.size() == 1){
@@ -259,37 +258,38 @@ public class GameMaster {
                                     minBid = 3;
                                 }
                                 //Does the player want to win the test if it is possible?
-                                System.out.println("Will you sacrifice " + minBid + " cards to pass this test?");
-                                temp = input.nextLine();
-                                if (temp == "Y" && players.get(questers.get(0)).countMaxBid() > minBid) {
+                                String message = ("Will you sacrifice " + minBid + " cards to pass this test?");
+                                temp = SocketMessagingController.askContinue(message, players.get(questers.get(0)));
+                                if (temp && players.get(questers.get(0)).countMaxBid() > minBid) {
                                     int removedCards = players.get(questers.get(0)).countFreeBid();
                                     while(removedCards <= minBid){
-                                        System.out.println(removedCards + "/" + (minBid+1) + " bids complete");
-                                        System.out.println("Please select a card to remove, player " + players.get(questers.get(0)));
-                                        temp = input.nextLine();
-                                        players.get(questers.get(0)).remove(temp);
+                                        message = (removedCards + "/" + (minBid+1) + " bids complete.\n");
+                                        message+=("Please select a card to remove, player " + players.get(questers.get(0)));
+                                        message = SocketMessagingController.askCard(message, players.get(questers.get(0)));
+                                        players.get(questers.get(0)).remove(message);
+                                        removedCards++;
+                                        //Add something to verify that the cards are being properly removed here
                                     }
                                     minBid++;
                                 } else {
                                     System.out.println("The player has failed the test due to lacking possible bids or lack of will.");
                                     questers.remove(0);
                                 }
-
                             }
 
                             while(questers.size() > 1) {
                                 for (int j = 0; j < questers.size(); j++) {
-                                    System.out.println("Player " + players.get(questers.get(j)) + ", will you bid at least " + (minBid + 1) + " cards to overcome this test?");
-                                    System.out.println("Please play any cards that will grant free bids for the next component before responding.");
+                                    String message = ("Player " + players.get(questers.get(j)) + ", will you bid at least " + (minBid + 1) + " cards to overcome this test?\n");
+                                    message += ("Please play any cards that will grant free bids for the next component before responding.");
                                     //ALLOW PLAYERS TO PLAY ALLY CARDS OR AMOUR CARDS HERE
-                                    temp = input.nextLine();
-                                    if (temp == "Y" && players.get(questers.get(j)).countMaxBid() > minBid) {
+                                    temp = SocketMessagingController.askContinue(message, players.get(questers.get(j)));
+                                    if (temp && players.get(questers.get(j)).countMaxBid() > minBid) {
                                         int removedCards = players.get(questers.get(j)).countFreeBid();
                                         while(removedCards <= minBid){
-                                            System.out.println(removedCards + "/" + (minBid+1) + " bids complete");
-                                            System.out.println("Please select a card to remove, player " + players.get(questers.get(j)));
-                                            temp = input.nextLine();
-                                            players.get(questers.get(j)).remove(temp);
+                                            message = (removedCards + "/" + (minBid+1) + " bids complete.\n");
+                                            message += ("Please select a card to remove, player " + players.get(questers.get(j)));
+                                            message = SocketMessagingController.askCard(message, players.get(questers.get(j)));
+                                            players.get(questers.get(j)).remove(message);
                                         }
                                         minBid++;
                                     } else {
@@ -345,9 +345,9 @@ public class GameMaster {
                         joinRequest -= players.size();
                     }
                     //players.get(joinRequest);
-                    System.out.println("Asking player " + joinRequest + " if they wish to join the tourney...");
-                    String temp = input.nextLine();
-                    if(temp == "Y"){
+                    String message = ("Asking player " + joinRequest + " if they wish to join the tourney...");
+                    boolean temp = SocketMessagingController.askContinue(message, players.get(joinRequest));
+                    if(temp){
                         participants.add(joinRequest);
                     }
                     else{
@@ -368,14 +368,14 @@ public class GameMaster {
 
                     //Everyone plays their cards
                     for (int i = 0; i < participants.size(); i++) {
-                        System.out.println("Would you like to play a card? (player " + players.get(participants.get(i)) + ")");
-                        String temp = input.nextLine();
-                        while(temp == "Y" && players.get(participants.get(i)).countBattle() >= 1) {
+                        String message = ("Would you like to play a card? (player " + players.get(participants.get(i)) + ")");
+                        boolean temp = SocketMessagingController.askContinue(message, players.get(participants.get(i)));
+                        while(temp && players.get(participants.get(i)).countBattle() >= 1) {
                             //Allows the attachment of multiple weapons
                             while (tourneyCard.getType() != "weapon" && tourneyCard.getType() != "amour" && tourneyCard.getType() != "ally") {
-                                System.out.println("What would you like to play?");
-                                temp = input.nextLine();
-                                tourneyCard = players.get(participants.get(i)).getCard(temp);
+                                message = ("What would you like to play?");
+                                message = SocketMessagingController.askCard(message, players.get(participants.get(i)));
+                                tourneyCard = players.get(participants.get(i)).getCard(message);
                             }
                             if(tourneyCard.getType() == "weapon") {
                                 playerStrength[i] += tourneyCard.getPotency();
@@ -383,7 +383,7 @@ public class GameMaster {
                             else if(tourneyCard.getType() == "ally"){
                                 //To be implemented
                             }
-                            else if(tourneyCard.getType() == "amour" && players.get(participants.get(i)).getAmour() == false){
+                            else if(tourneyCard.getType() == "amour" && !players.get(participants.get(i)).getAmour()){
                                 playerStrength[i] += 10;
                                 players.get(participants.get(i)).activateAmour();
                             }
@@ -391,10 +391,10 @@ public class GameMaster {
                                 System.out.println("Cannot play an amour card while amour is already active!");
                             }
                             players.get(participants.get(i)).remove(tourneyCard.getTitle());
-                            System.out.println("Would you like to add another weapon?");
-                            temp = input.nextLine();
+                            message = ("Would you like to add another weapon?");
+                            temp = SocketMessagingController.askContinue(message, players.get(participants.get(i)));
                         }
-                        if(temp=="Y"){
+                        if(temp){
                             //Will only fire if the player wishes to play a weapon and has none in hand
                             System.out.println("No playable cards left in hand!");
                         }
@@ -421,14 +421,14 @@ public class GameMaster {
 
                         //Do the whole 'play your cards' thing again
                         for (int i = 0; i < participants.size(); i++) {
-                            System.out.println("Would you like to play a card? (player " + players.get(participants.get(i)) + ")");
-                            String temp = input.nextLine();
-                            while(temp == "Y" && players.get(participants.get(i)).countBattle() >= 1) {
+                            String message = ("Would you like to play a card? (player " + players.get(participants.get(i)) + ")");
+                            boolean temp = SocketMessagingController.askContinue(message, players.get(participants.get(i)));
+                            while(temp && players.get(participants.get(i)).countBattle() >= 1) {
                                 //Allows the attachment of multiple weapons
                                 while (tourneyCard.getType() != "weapon" && tourneyCard.getType() != "amour" && tourneyCard.getType() != "ally") {
-                                    System.out.println("What would you like to play?");
-                                    temp = input.nextLine();
-                                    tourneyCard = players.get(participants.get(i)).getCard(temp);
+                                    message = ("What would you like to play?");
+                                    message = SocketMessagingController.askCard(message, players.get(participants.get(i)));
+                                    tourneyCard = players.get(participants.get(i)).getCard(message);
                                 }
                                 if(tourneyCard.getType() == "weapon") {
                                     playerStrength[i] += tourneyCard.getPotency();
@@ -436,7 +436,7 @@ public class GameMaster {
                                 else if(tourneyCard.getType() == "ally"){
                                     //To be implemented
                                 }
-                                else if(tourneyCard.getType() == "amour" && players.get(participants.get(i)).getAmour() == false){
+                                else if(tourneyCard.getType() == "amour" && !players.get(participants.get(i)).getAmour()){
                                     playerStrength[i] += 10;
                                     players.get(participants.get(i)).activateAmour();
                                 }
@@ -444,10 +444,10 @@ public class GameMaster {
                                     System.out.println("Cannot play an amour card while amour is already active!");
                                 }
                                 players.get(participants.get(i)).remove(tourneyCard.getTitle());
-                                System.out.println("Would you like to add another weapon?");
-                                temp = input.nextLine();
+                                message = ("Would you like to add another weapon?");
+                                temp = SocketMessagingController.askContinue(message, players.get(participants.get(i)));
                             }
-                            if(temp=="Y"){
+                            if(temp){
                                 //Will only fire if the player wishes to play a weapon and has none in hand
                                 System.out.println("No playable cards left in hand!");
                             }

@@ -105,6 +105,8 @@ function replies(message){
         }
     }
 }
+
+/*
 function finishTurn(){
     console.log("boop");
         if($(".playArea").html()==""){
@@ -113,7 +115,7 @@ function finishTurn(){
 
         }
 
-}
+}*/
 
 $(function(){
     $( "#connect" ).click(function() { connect(); });

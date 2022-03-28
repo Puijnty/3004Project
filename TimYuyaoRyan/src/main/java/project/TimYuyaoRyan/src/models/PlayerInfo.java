@@ -1,5 +1,7 @@
 package project.TimYuyaoRyan.src.models;
 
+import project.TimYuyaoRyan.src.controllers.SocketMessagingController;
+
 public class PlayerInfo {
 
     public PlayerInfo(int id,boolean turn){
@@ -31,13 +33,15 @@ public class PlayerInfo {
     CardDeck hand = new CardDeck();
 
     public Card remove(String s) {
-        return hand.remove(s);
+        Card c = hand.remove(s);
+        SocketMessagingController.sendHand(this);
+        return c;
     }
 
     public void give(Card c){
         hand.add(c);
+        SocketMessagingController.sendHand(this);
     }
-
 
     public int countQuestComponents(){
         int count = 0;

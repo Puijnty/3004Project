@@ -7,7 +7,6 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.stereotype.Controller;
 import project.TimYuyaoRyan.src.models.CardDeck;
 import project.TimYuyaoRyan.src.models.PlayerInfo;
@@ -25,6 +24,15 @@ public class SocketMessagingController {
     @Autowired
     public SocketMessagingController(SimpMessagingTemplate template) {
         this.template = template;
+    }
+
+    public static boolean askContinue(String message, PlayerInfo player) {
+        return true;
+    }
+
+    public static String askCard(String message, PlayerInfo player) {
+        String cardName = "";
+        return cardName;
     }
 
     @MessageMapping("/join")
