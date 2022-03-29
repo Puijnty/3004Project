@@ -35,8 +35,12 @@ function takeTurn(message){
         if(!message.turn){
             updateHand(message.cards);
         }else{
-            updateHand(message.cards);
-            $("#nextTurn").show()
+           updateHand(message.cards);
+            if(message.type==1){$("#nextTurn").show();}
+            if(message.type==2){
+                $("#yes").show();
+                $("#no").show();
+            }
         }
     }
 }
@@ -70,7 +74,7 @@ function updateConnect(){
 
 function setUp(){
     $("#start").hide();
-    //$("#nextTurn").hide();
+    $("#nextTurn").hide();
 }
 
 function disconnect() {
@@ -94,28 +98,32 @@ function start(){
 }
 
 function replies(message){
+    console.log("in function replies:message received: "+message);
     if(id==1){
         if(message=="Not Enough Players!"){
             alert(message);
         }
-    }else{
-        if(message=="Game Started!"){
+    }
+    if(message=="Game Started!"){
+        if(id==1){
             $("#start").hide();
-            alert(message);
         }
+        alert(message);
     }
 }
 
-/*
+
 function finishTurn(){
-    console.log("boop");
-        if($(".playArea").html()==""){
-           alert.("Play a Card!")
-        }else{
-
-        }
-
-}*/
+    if($(".playArea").html()==""){
+        alert("Play a Card!");
+    }else{
+        console.log("sever sent: "+$(".pa").attr("src").slice(8,-4));
+        stompClient.send("/app/playedCard",{},id+$(".pa").attr("src").slice(8,-4));
+        //hope for no race condition may need to make send callback to next line
+        $(".playArea").html()="";
+        $("#nextTurn").hide();
+    }
+}
 
 $(function(){
     $( "#connect" ).click(function() { connect(); });

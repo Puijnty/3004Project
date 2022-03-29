@@ -25,7 +25,7 @@ public class CardDeck {
         //Draws a random card and removes it from the deck
         Collections.shuffle(data);
         Card c = data.get(0);
-        System.out.println(c.title);
+        //System.out.println(c.title);
         data.remove(0);
         return c;
     }

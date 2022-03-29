@@ -26,13 +26,14 @@ public class SocketMessagingController {
         this.template = template;
     }
 
-    public static boolean askContinue(String message, PlayerInfo player) {
-        return true;
+    @MessageMapping("/Continue")
+    public void updateCond(boolean message){
+        gameMaster.setCont(message);
     }
 
-    public static String askCard(String message, PlayerInfo player) {
-        String cardName = "";
-        return cardName;
+    @MessageMapping("/playedCard")
+    public void playedCard(String message){
+        gameMaster.setPlayedCard(message);
     }
 
     @MessageMapping("/join")
@@ -49,9 +50,9 @@ public class SocketMessagingController {
     public String start() {
         if (!gameMaster.isLaunched()) {
             if (gameMaster.getNumPlayers() >= 2) {
-                System.out.println("here");
+                System.out.println("Game initializing");
                 gameMaster.initialize();
-                return "Game Started!";
+                return "Game Ended!";
             }
             return "Not Enough Players!";
         }
@@ -67,13 +68,13 @@ public class SocketMessagingController {
         template.convertAndSend("/game/Discard",pile.toString());
     }
 
-    public static void turnReplies(PlayerInfo p,String message){
-        template.convertAndSend("/game/TurnReplies",
-                "{\"id\":" +p.getId()+ ",\"turn\":" +p.isTurn() + ",\"message\":"+message + ",\"cards\":"+p.getHand()+"}");
+    public static void playTurn(PlayerInfo p,String message,int type){
+        template.convertAndSend("/game/Turn",
+                "{\"id\":" +p.getId()+ ",\"turn\":" +p.isTurn() + "\"type\":"+type+",\"message\":\""+message + "\",\"cards\":"+p.getHand()+"}");
     }
 
-    public static void playTurn(PlayerInfo p,String type,String cardName){
-        template.convertAndSend("/game/Turn",
-                "{\"id\":" +p.getId()+ ",\"turn\":" +p.isTurn()+ ",\"type\":"+ type +",\"card\":"+ cardName+"}");
+    public static void StartMessage(){
+        template.convertAndSend("/game/Reply","Game Started!");
     }
+
 }
