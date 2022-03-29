@@ -140,10 +140,12 @@ public class GameMaster {
                         //Pick a card for each stage
                         Card stageCard = c;
                         //Ensure that the card is the correct type and that no more than one test is played
-                        while(stageCard.getType() != "foe" || (stageCard.getType() != "test" || stageCard.getType() == "test" && testBool)){
+                        while(stageCard.getType() != "foe" && (stageCard.getType() != "test" && (stageCard.getType() == "test" && !testBool))){
                             String message = "What would you like to play for stage " + i + "?";
                             String temp = GetPlayedCardName(message, players.get(sponsor));
                             stageCard = players.get(sponsor).getCard(temp);
+                            System.out.println(stageCard.getTitle());
+                            System.out.println(stageCard.getType());
                             if(stageCard.getType() == "test" && testBool){
                                 System.out.println("Two tests cannot be played in the same quest!");
                             }
