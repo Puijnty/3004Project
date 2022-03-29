@@ -35,6 +35,7 @@ function takeTurn(message){
         if(!message.turn){
             updateHand(message.cards);
         }else{
+           alert(message.message);
            updateHand(message.cards);
             if(message.type==1){$("#nextTurn").show();}
             if(message.type==2){$(".yeno").show();}

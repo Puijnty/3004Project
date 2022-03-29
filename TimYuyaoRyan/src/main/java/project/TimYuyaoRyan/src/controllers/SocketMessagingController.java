@@ -26,8 +26,9 @@ public class SocketMessagingController {
         this.template = template;
     }
 
-    @MessageMapping("/Continue")
+    @MessageMapping("/continue")
     public void updateCont(boolean message){
+        System.out.println("in updateCont message:"+message);
         gameMaster.setCont(message);
     }
 
@@ -61,7 +62,7 @@ public class SocketMessagingController {
 
     public static void sendHand(PlayerInfo p){
         template.convertAndSend("/game/Turn",
-               "{\"id\":" +p.getId()+ ",\"turn\":" +p.isTurn()+ ",\"cards\":"+p.getHand()+"}");
+               "{\"id\":" +p.getId()+ ",\"turn\":" +false+ ",\"cards\":"+p.getHand()+"}");
     }
 
     public static void sendDiscard(CardDeck pile){

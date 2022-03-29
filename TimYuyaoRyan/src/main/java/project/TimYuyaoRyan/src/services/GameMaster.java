@@ -118,7 +118,7 @@ public class GameMaster {
 
                 for (int i = 0; i < players.size(); i++) {
                     int sponsorRequest = i + currentTurn;
-                    if(sponsorRequest > players.size()){
+                    if(sponsorRequest >= players.size()){
                         sponsorRequest -= players.size();
                     }
                     //players.get(sponsorRequest);
@@ -356,7 +356,7 @@ public class GameMaster {
                 //Ask if players wish to compete
                 for (int i = 0; i < players.size(); i++) {
                     int joinRequest = i + currentTurn;
-                    if(joinRequest > players.size()){
+                    if(joinRequest >= players.size()){
                         joinRequest -= players.size();
                     }
                     //players.get(joinRequest);
