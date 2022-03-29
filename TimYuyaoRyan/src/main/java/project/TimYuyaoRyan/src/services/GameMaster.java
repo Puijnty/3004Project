@@ -89,7 +89,7 @@ public class GameMaster {
 
     public void nextTurn(){
         currentTurn+=1;
-        if(currentTurn > players.size()){
+        if(currentTurn >= players.size()){
             currentTurn = 0;
         }
     }
@@ -140,14 +140,13 @@ public class GameMaster {
                         //Pick a card for each stage
                         Card stageCard = c;
                         //Ensure that the card is the correct type and that no more than one test is played
-                        while(stageCard.getType() != "foe" && (stageCard.getType() != "test" && (stageCard.getType() == "test" && !testBool))){
+                        while(!stageCard.getType().equals("foe") && (!stageCard.getType().equals("test"))){
                             String message = "What would you like to play for stage " + i + "?";
                             String temp = GetPlayedCardName(message, players.get(sponsor));
                             stageCard = players.get(sponsor).getCard(temp);
-                            System.out.println(stageCard.getTitle());
-                            System.out.println(stageCard.getType());
                             if(stageCard.getType() == "test" && testBool){
                                 System.out.println("Two tests cannot be played in the same quest!");
+                                stageCard = c;
                             }
                         }
                         stageDeck.add(stageCard);
@@ -173,6 +172,7 @@ public class GameMaster {
                                     players.get(sponsor).remove(stageCard.getTitle());
                                     sponsorCards++;
                                     message = ("Would you like to attach another weapon?");
+                                    stageCard = c;
                                     temp = GetCont(message, players.get(sponsor));
                                 }
                             }
@@ -191,8 +191,8 @@ public class GameMaster {
                     //Create the list of participants
                     ArrayList<Integer> questers = new ArrayList<Integer>();
                     for (int i = 0; i < players.size(); i++) {
-                        if(players.get(i).getId() != sponsor){
-                            questers.add(players.get(i).getId());
+                        if(i != sponsor){
+                            questers.add(i);
                         }
                     }
 
@@ -204,15 +204,16 @@ public class GameMaster {
                             //At each stage of the quest, each participant still in the quest draws a card
                             CheckDeck(advDeck);
                             players.get(questers.get(j)).give(advDeck.draw());
+                            System.out.println("Successfully did card draw");
                         }
 
-                        if(stageCard.getType() == "foe"){
+                        if(stageCard.getType().equals("foe")){
                             //Read the full strength of the foe based on conditions and weapons
                             int foeStrength = stageCard.getPotency();
-                            if(stageCard.getTitle() == c.getCondition() || "all" == c.getCondition()){
+                            if(stageCard.getTitle() == c.getCondition() || c.getCondition().equals("all")){
                                foeStrength = stageCard.getConditionalPotency();
                             }
-                            while(stageDeck.next().getType() == "weapon"){
+                            while(stageDeck.nextType().equals("weapon")){
                                 foeStrength += stageDeck.next().getPotency();
                                 stageDeck.remove(stageDeck.next().getTitle());
                             }
@@ -245,10 +246,10 @@ public class GameMaster {
                                     else{
                                         System.out.println("Cannot play an amour card while amour is already active!");
                                     }
-                                    players.get(questers.get(j)).remove(stageCard.getTitle());
-                                    sponsorCards++;
+                                    players.get(questers.get(j)).remove(questerCard.getTitle());
                                     message = ("Would you like to add another weapon?");
                                     temp = GetCont(message, players.get(questers.get(j)));
+                                    questerCard = c;
                                 }
                                 if(temp){
                                     //Will only fire if the player wishes to play a weapon and has none in hand
@@ -350,7 +351,6 @@ public class GameMaster {
                 //Disable recognition event at the end of the quest
                 recognition = false;
             }
-
 
             else if(c.getType() == "tournament"){
                 //Do tournament things
@@ -533,7 +533,7 @@ public class GameMaster {
                         //The player drawing loses 2 shields, cannot go below 0
                         players.get(currentTurn).award(-2);
                         if(players.get(currentTurn).getShields() < 0){
-                            players.get(currentTurn).award(0 - players.get(currentTurn).getShields());
+                            players.get(currentTurn).award(-players.get(currentTurn).getShields());
                         }
                         break;
                     case "event_recognition":
@@ -631,7 +631,7 @@ public class GameMaster {
             advDeck.add(advGen.publish("weapon_battleax", "weapon"));
         }
 
-        advDeck.add(advGen.publish("ally_gawain", "ally"));
+        /*advDeck.add(advGen.publish("ally_gawain", "ally"));
         advDeck.add(advGen.publish("ally_pellinore", "ally"));
         advDeck.add(advGen.publish("ally_percival", "ally"));
         advDeck.add(advGen.publish("ally_tristan", "ally"));
@@ -640,7 +640,7 @@ public class GameMaster {
         advDeck.add(advGen.publish("ally_merlin", "ally"));
         advDeck.add(advGen.publish("ally_iseult", "ally"));
         advDeck.add(advGen.publish("ally_lancelot", "ally"));
-        advDeck.add(advGen.publish("ally_galahad", "ally"));
+        advDeck.add(advGen.publish("ally_galahad", "ally"));*/
 
         for(int i = 0; i < 8; i++){
             advDeck.add(advGen.publish("ally_amour", "amour"));

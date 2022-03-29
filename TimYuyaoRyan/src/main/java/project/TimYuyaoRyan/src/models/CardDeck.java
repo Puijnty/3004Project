@@ -58,4 +58,11 @@ public class CardDeck {
         result = result.substring(0, result.length() - 1) + "}";
         return result;
     }
+
+    public Object nextType() {
+        if(data.size() == 0){
+            return "";
+        }
+        return data.get(0).getType();
+    }
 }
