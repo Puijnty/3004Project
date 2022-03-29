@@ -32,7 +32,7 @@ public class CardDeck {
 
     public Card get(String s) {
         for (int i = 0; i < data.size(); i++) {
-            if (data.get(i).getTitle() == s) {
+            if (data.get(i).getTitle().equals(s) ) {
                 return data.get(i);
             }
         }

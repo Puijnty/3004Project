@@ -127,7 +127,7 @@ function finishTurn(){
         alert("Play a Card!");
     }else{
         console.log("sever sent: "+$(".pa").attr("src").slice(8,-4));
-        stompClient.send("/app/playedCard",{},id+$(".pa").attr("src").slice(8,-4));
+        stompClient.send("/app/playedCard",{},$(".pa").attr("src").slice(8,-4));
         //hope for no race condition may need to make send callback to next line
         $(".playArea").empty();
         $("#nextTurn").hide();
