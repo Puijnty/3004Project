@@ -685,18 +685,22 @@ public class GameMaster {
     }
 
     private String GetPlayedCardName(String message,PlayerInfo player){
+        player.setTurn(true);
         SocketMessagingController.playTurn(player,message,1);
         while(playedCard.equals("")){}
         String result = playedCard;
         SanitiseCard();
+        player.setTurn(false);
         return result;
     }
 
     private Boolean GetCont(String message,PlayerInfo player){
+        player.setTurn(true);
         SocketMessagingController.playTurn(player,message,2);
         while(changed==false){}
         boolean result = cont;
         SanitiseCont();
+        player.setTurn(false);
         return result;
     }
 

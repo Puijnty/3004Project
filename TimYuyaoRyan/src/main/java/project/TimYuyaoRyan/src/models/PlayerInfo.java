@@ -11,7 +11,6 @@ public class PlayerInfo {
 
     private int id;
 
-
     public void setTurn(boolean turn) {
         this.turn = turn;
     }
@@ -20,7 +19,7 @@ public class PlayerInfo {
     private boolean amour = false;
     private int shields = 0;
 
-    public boolean isTurn(){return turn;}
+    public boolean isTurn(){ return turn;}
 
     public String getHand() {
         return hand.toString();
