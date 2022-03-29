@@ -27,7 +27,7 @@ public class SocketMessagingController {
     }
 
     @MessageMapping("/Continue")
-    public void updateCond(boolean message){
+    public void updateCont(boolean message){
         gameMaster.setCont(message);
     }
 
@@ -70,7 +70,7 @@ public class SocketMessagingController {
 
     public static void playTurn(PlayerInfo p,String message,int type){
         template.convertAndSend("/game/Turn",
-                "{\"id\":" +p.getId()+ ",\"turn\":" +p.isTurn() + "\"type\":"+type+",\"message\":\""+message + "\",\"cards\":"+p.getHand()+"}");
+                "{\"id\":" +p.getId()+ ",\"turn\":" +p.isTurn() + ",\"type\":"+type+",\"message\":\""+message + "\",\"cards\":"+p.getHand()+"}");
     }
 
     public static void StartMessage(){

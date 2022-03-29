@@ -4,7 +4,12 @@
     left: 60%;
     position: absolute;
 }
-
+.yeno{
+    top:65%;
+    left:55%;
+    position:absolute;
+    text-align: center;
+}
 .discard{
     background: #aaa;
     top: 5%;
@@ -36,7 +41,7 @@
 }
 
 .pa{
-width: 20vw;
+width: 15vw;
 }
 .hand{
     width: 100%;

@@ -37,12 +37,19 @@ function takeTurn(message){
         }else{
            updateHand(message.cards);
             if(message.type==1){$("#nextTurn").show();}
-            if(message.type==2){
-                $("#yes").show();
-                $("#no").show();
-            }
+            if(message.type==2){$(".yeno").show();}
         }
     }
+}
+
+function updateDiscard(deck){
+    $("#pile").empty();
+    Object.keys(deck).forEach(key => {
+          let value = hand[key];
+          var img = $("<img>");
+          img.attr("src","/images/"+value+".png");
+          img.addClass("card");
+          });
 }
 
 function updateHand(hand){
@@ -75,6 +82,7 @@ function updateConnect(){
 function setUp(){
     $("#start").hide();
     $("#nextTurn").hide();
+    $(".yeno").hide();
 }
 
 function disconnect() {
@@ -124,11 +132,22 @@ function finishTurn(){
         $("#nextTurn").hide();
     }
 }
+function yesTurn(){
+    stompClient.send("/app/continue",{},true);
+    $(".yeno").hide();
+}
+
+function noTurn(){
+    stompClient.send("/app/continue",{},false);
+        $(".yeno").hide();
+}
 
 $(function(){
     $( "#connect" ).click(function() { connect(); });
     $(".pc").click(function() { updatePlayArea($(this)); });
     $("#start").click(function(){start(); });
     $("#nextTurn").click(function(){finishTurn();});
+    $("#yes").click(function(){yesTurn();});
+    $("#no").click(function(){noTurn();});
     });
 

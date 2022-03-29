@@ -52,6 +52,7 @@ public class GameMaster {
         if(removedCard != null) {
             discardDeck.add(removedCard);
         }
+        SocketMessagingController.sendDiscard(discardDeck);
     }
 
 
