@@ -7,6 +7,7 @@ import project.TimYuyaoRyan.src.controllers.SocketMessagingController;
 import project.TimYuyaoRyan.src.models.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Scope("application")
@@ -20,6 +21,7 @@ public class GameMaster {
     public void setCont(boolean cont) {
         this.cont = cont;
         this.changed=true;
+        System.out.println("finished set cont. cont="+this.cont+" changed="+changed);
     }
 
 
@@ -687,20 +689,32 @@ public class GameMaster {
     private String GetPlayedCardName(String message,PlayerInfo player){
         player.setTurn(true);
         SocketMessagingController.playTurn(player,message,1);
-        while(playedCard.equals("")){}
+        while(playedCard.equals("")){ try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }}
         String result = playedCard;
         SanitiseCard();
         player.setTurn(false);
         return result;
     }
 
-    private Boolean GetCont(String message,PlayerInfo player){
+    private Boolean GetCont(String message,PlayerInfo player) {
+        System.out.println("in GetCont waiting for change");
         player.setTurn(true);
         SocketMessagingController.playTurn(player,message,2);
-        while(changed==false){}
+        while(changed==false){
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         boolean result = cont;
         SanitiseCont();
         player.setTurn(false);
+        System.out.println("in GetCont changed occurred");
         return result;
     }
 
