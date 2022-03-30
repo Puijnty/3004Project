@@ -150,7 +150,8 @@ public class GameMaster {
                             }
                         }
                         stageDeck.add(stageCard);
-                        players.get(sponsor).remove(stageCard.getTitle());
+                        discardDeck.add(players.get(sponsor).remove(stageCard.getTitle()));
+                        SocketMessagingController.sendDiscard(discardDeck);
                         sponsorCards++;
                         if(stageCard.getType() == "test"){
                             testBool = true;
@@ -169,7 +170,8 @@ public class GameMaster {
                                         stageCard = players.get(sponsor).getCard(message);
                                     }
                                     stageDeck.add(stageCard);
-                                    players.get(sponsor).remove(stageCard.getTitle());
+                                    discardDeck.add(players.get(sponsor).remove(stageCard.getTitle()));
+                                    SocketMessagingController.sendDiscard(discardDeck);
                                     sponsorCards++;
                                     message = ("Would you like to attach another weapon?");
                                     stageCard = c;
@@ -246,7 +248,8 @@ public class GameMaster {
                                     else{
                                         System.out.println("Cannot play an amour card while amour is already active!");
                                     }
-                                    players.get(questers.get(j)).remove(questerCard.getTitle());
+                                    discardDeck.add(players.get(questers.get(j)).remove(questerCard.getTitle()));
+                                    SocketMessagingController.sendDiscard(discardDeck);
                                     message = ("Would you like to add another weapon?");
                                     temp = GetCont(message, players.get(questers.get(j)));
                                     questerCard = c;
@@ -286,7 +289,8 @@ public class GameMaster {
                                         message = (removedCards + "/" + (minBid+1) + " bids complete.\n");
                                         message+=("Please select a card to remove, player " + players.get(questers.get(0)));
                                         message = GetPlayedCardName(message, players.get(questers.get(0)));
-                                        players.get(questers.get(0)).remove(message);
+                                        discardDeck.add(players.get(questers.get(0)).remove(message));
+                                        SocketMessagingController.sendDiscard(discardDeck);
                                         removedCards++;
                                         //Add something to verify that the cards are being properly removed here
                                     }
@@ -309,7 +313,8 @@ public class GameMaster {
                                             message = (removedCards + "/" + (minBid+1) + " bids complete.\n");
                                             message += ("Please select a card to remove, player " + players.get(questers.get(j)));
                                             message = GetPlayedCardName(message, players.get(questers.get(j)));
-                                            players.get(questers.get(j)).remove(message);
+                                            discardDeck.add(players.get(questers.get(j)).remove(message));
+                                            SocketMessagingController.sendDiscard(discardDeck);
                                         }
                                         minBid++;
                                     } else {
@@ -409,9 +414,11 @@ public class GameMaster {
                             else{
                                 System.out.println("Cannot play an amour card while amour is already active!");
                             }
-                            players.get(participants.get(i)).remove(tourneyCard.getTitle());
+                            discardDeck.add(players.get(participants.get(i)).remove(tourneyCard.getTitle()));
+                            SocketMessagingController.sendDiscard(discardDeck);
                             message = ("Would you like to add another weapon?");
                             temp = GetCont(message, players.get(participants.get(i)));
+                            tourneyCard = c;
                         }
                         if(temp){
                             //Will only fire if the player wishes to play a weapon and has none in hand
@@ -462,9 +469,11 @@ public class GameMaster {
                                 else{
                                     System.out.println("Cannot play an amour card while amour is already active!");
                                 }
-                                players.get(participants.get(i)).remove(tourneyCard.getTitle());
+                                discardDeck.add(players.get(participants.get(i)).remove(tourneyCard.getTitle()));
+                                SocketMessagingController.sendDiscard(discardDeck);
                                 message = ("Would you like to add another weapon?");
                                 temp = GetCont(message, players.get(participants.get(i)));
+                                tourneyCard = c;
                             }
                             if(temp){
                                 //Will only fire if the player wishes to play a weapon and has none in hand

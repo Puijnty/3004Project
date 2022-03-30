@@ -66,6 +66,7 @@ public class SocketMessagingController {
     }
 
     public static void sendDiscard(CardDeck pile){
+        System.out.println("Sending discard pile");
         template.convertAndSend("/game/Discard",pile.toString());
     }
 
