@@ -26,6 +26,9 @@ function connect() {
         stompClient.subscribe('/game/Discard', function (message) {
                                 updateDiscard(message.body);
                             });
+        stompClient.subscribe('/game/score', function (message) {
+            updateDiscard(message.body);
+        });
      });
  }
 
@@ -53,6 +56,21 @@ function updateDiscard(deck){
           });
 }
 
+function updateLeaderBoard(message){
+    $("#first").empty();
+    $("#second").empty();
+    $("#third").empty();
+    $("#fourth").empty();
+    Object.keys(message).forEach(key => {
+        addToLeaderBoard(key,message[key]);
+    }
+
+}
+function addToLeaderBoard(pos,playerInfo){
+    $("#"+pos).append($("<td></td>").text(playerInfo["player"]));
+    $("#"+pos).append($("<td></td>").text(playerInfo["shields"]));
+}
+
 function updateHand(hand){
     $("#hand").empty();
     Object.keys(hand).forEach(key => {
@@ -67,7 +85,6 @@ function updateHand(hand){
       });
       $("#hand").append(img);
     });
-
 }
 
 function updateConnect(){
@@ -128,11 +145,11 @@ function finishTurn(){
     }else{
         console.log("sever sent: "+$(".pa").attr("src").slice(8,-4));
         stompClient.send("/app/playedCard",{},$(".pa").attr("src").slice(8,-4));
-        //hope for no race condition may need to make send callback to next line
         $(".playArea").empty();
         $("#nextTurn").hide();
     }
 }
+
 function yesTurn(){
     stompClient.send("/app/continue",{},true);
     $(".yeno").hide();

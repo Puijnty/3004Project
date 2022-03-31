@@ -28,7 +28,6 @@ public class SocketMessagingController {
 
     @MessageMapping("/continue")
     public void updateCont(boolean message){
-        System.out.println("in updateCont message:"+message);
         gameMaster.setCont(message);
     }
 
@@ -66,8 +65,21 @@ public class SocketMessagingController {
     }
 
     public static void sendDiscard(CardDeck pile){
-        System.out.println("Sending discard pile");
+        System.out.println("Sending discard pile: "+pile.toString());
         template.convertAndSend("/game/Discard",pile.toString());
+    }
+
+    public static void sendLeaderBoard(int[] players,int[] shields){
+        String message="";
+        switch(players.length) {
+            case 4:
+                message = ",\"fourth\":{\"player\":\"Player "+players[3]+",\"shields\":"+shields[3]+"}";
+            case 3:
+                message = ",\"third\":{\"player\":\"Player "+players[2]+",\"shields\":"+shields[2]+"}"+message;
+            case 2:
+                message = "{\"first\":{\"player\":\"Player "+players[0]+",\"shields\":"+shields[0]+"},\"second\":{\"player\":\"Player "+players[1]+"\"shields\":"+shields[1]+"}"+message+"}";
+        }
+        template.convertAndSend("/game/score",message);
     }
 
     public static void playTurn(PlayerInfo p,String message,int type){

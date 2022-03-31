@@ -1,17 +1,27 @@
 .turn{
-
     top: 65%;
     left: 60%;
     position: absolute;
 }
+
 .yeno{
     top:65%;
     left:55%;
     position:absolute;
     text-align: center;
 }
+
+.storyArea{
+}
+
+.leaderboard{
+    top: 30%;
+    left:85%;
+    position: absolute;
+    text-align: center;
+}
+
 .discard{
-    background: #aaa;
     top: 5%;
     left:85%;
     position: absolute;
@@ -32,7 +42,6 @@
 }
 
 .playArea{
-    background: #aaa;
     position: absolute;
     top: 30%;
     left: 50%;
@@ -41,12 +50,17 @@
 }
 
 .pa{
-width: 15vw;
+width: 10vw;
 }
+
 .hand{
     width: 100%;
     top: 80%;
     margin:auto;
     position: absolute;
     text-align: center;
+}
+
+table,th{
+    border:1px solid black;
 }

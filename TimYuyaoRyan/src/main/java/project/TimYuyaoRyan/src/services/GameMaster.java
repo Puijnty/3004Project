@@ -8,6 +8,7 @@ import project.TimYuyaoRyan.src.models.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+import java.util.Arrays;
 
 @Service
 @Scope("application")
@@ -21,7 +22,6 @@ public class GameMaster {
     public void setCont(boolean cont) {
         this.cont = cont;
         this.changed=true;
-        System.out.println("finished set cont. cont="+this.cont+" changed="+changed);
     }
 
 
@@ -712,7 +712,6 @@ public class GameMaster {
     }
 
     private Boolean GetCont(String message,PlayerInfo player) {
-        System.out.println("in GetCont waiting for change");
         player.setTurn(true);
         SocketMessagingController.playTurn(player,message,2);
         while(changed==false){
@@ -725,7 +724,6 @@ public class GameMaster {
         boolean result = cont;
         SanitiseCont();
         player.setTurn(false);
-        System.out.println("in GetCont changed occurred");
         return result;
     }
 
@@ -736,5 +734,28 @@ public class GameMaster {
     private void SanitiseCont(){
         cont=false;
         changed=false;
+    }
+
+    private void calculateLeaderboard() {
+        int[] shields = new int[players.size()];
+        int[] player = new int[players.size()];
+        for (int i = 0; i < players.size(); i++) {
+            shields[i] = players.get(i).getShields();
+            player[i]=-1;
+        }
+
+        Arrays.sort(shields);
+        for (int i = 0; i < players.size(); i++) {
+            for(int j=0; j<players.size();j++){
+                if(shields[i]==players.get(j).getShields()){
+                    if(player[i]==-1){
+                        player[i]=players.get(j).getId();
+                    }else{
+                        player[i+1]=players.get(j).getId();
+                    }
+                }
+            }
+        }
+        SocketMessagingController.sendLeaderBoard(player,shields);
     }
 }
