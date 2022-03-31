@@ -73,11 +73,11 @@ public class SocketMessagingController {
         String message="";
         switch(players.length) {
             case 4:
-                message = ",\"fourth\":{\"player\":\"Player "+players[3]+",\"shields\":"+shields[3]+"}";
+                message = ",\"fourth\":{\"player\":\"Player "+players[3]+"\",\"shields\":"+shields[3]+"}";
             case 3:
-                message = ",\"third\":{\"player\":\"Player "+players[2]+",\"shields\":"+shields[2]+"}"+message;
+                message = ",\"third\":{\"player\":\"Player "+players[2]+"\",\"shields\":"+shields[2]+"}"+message;
             case 2:
-                message = "{\"first\":{\"player\":\"Player "+players[0]+",\"shields\":"+shields[0]+"},\"second\":{\"player\":\"Player "+players[1]+"\"shields\":"+shields[1]+"}"+message+"}";
+                message = "{\"first\":{\"player\":\"Player "+players[0]+"\",\"shields\":"+shields[0]+"},\"second\":{\"player\":\"Player "+players[1]+"\",\"shields\":"+shields[1]+"}"+message+"}";
         }
         template.convertAndSend("/game/score",message);
     }

@@ -339,6 +339,7 @@ public class GameMaster {
                             players.get(questers.get(j)).award(2);
                         }
                     }
+                    calculateLeaderboard();
                 }
                 else{
                     System.out.println("Nobody sponsors the quest!");
@@ -501,12 +502,14 @@ public class GameMaster {
                             for (int i = 0; i < participants.size(); i++) {
                                 players.get(participants.get(i)).award(originalParticipants);
                             }
+                            calculateLeaderboard();
                         }
                     }
                 }
                 else if(participants.size() == 1){
                     System.out.println("The sole participant gains " + (1 + c.getPotency()) + " shields!");
                     players.get(participants.get(0)).award(1 + c.getPotency());
+                    calculateLeaderboard();
                 }
                 else{
                     System.out.println("Noone dares to compete in the tournament!");
@@ -527,14 +530,17 @@ public class GameMaster {
                         for (int i = 0; i < players.size(); i++) {
                             if(players.get(i).getShields() == min_shields){
                                 players.get(i).award(3);
+
                             }
                         }
+                        calculateLeaderboard();
                         break;
                     case "event_pox":
                         //Everyone except the player drawing the card loses 1 shield
                         for (int i = 0; i < players.size(); i++) {
                             if(players.get(i).getShields() > 0 && i != currentTurn){
                                 players.get(i).award(-1);
+                                calculateLeaderboard();
                             }
                         }
                         break;
@@ -543,6 +549,7 @@ public class GameMaster {
                         players.get(currentTurn).award(-2);
                         if(players.get(currentTurn).getShields() < 0){
                             players.get(currentTurn).award(-players.get(currentTurn).getShields());
+                            calculateLeaderboard();
                         }
                         break;
                     case "event_recognition":
@@ -748,10 +755,9 @@ public class GameMaster {
         for (int i = 0; i < players.size(); i++) {
             for(int j=0; j<players.size();j++){
                 if(shields[i]==players.get(j).getShields()){
-                    if(player[i]==-1){
-                        player[i]=players.get(j).getId();
-                    }else{
-                        player[i+1]=players.get(j).getId();
+                    if(player[i]==-1) {
+                        player[i] = players.get(j).getId();
+                        break;
                     }
                 }
             }

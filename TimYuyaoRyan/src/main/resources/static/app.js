@@ -24,16 +24,15 @@ function connect() {
                         replies(message.body);
                     });
         stompClient.subscribe('/game/Discard', function (message) {
-                                updateDiscard(message.body);
+                                updateDiscard(JSON.parse(message.body));
                             });
         stompClient.subscribe('/game/score', function (message) {
-            updateDiscard(message.body);
+            updateLeaderBoard(JSON.parse(message.body));
         });
      });
  }
 
 function takeTurn(message){
-    console.log("turn message received");
     if(message.id==id){
         if(!message.turn){
             updateHand(message.cards);
@@ -47,24 +46,26 @@ function takeTurn(message){
 }
 
 function updateDiscard(deck){
+console.log(deck);
     $("#pile").empty();
     Object.keys(deck).forEach(key => {
           let value = hand[key];
           var img = $("<img>");
           img.attr("src","/images/"+value+".png");
           img.addClass("card");
+          $("#pile").append(img);
           });
 }
 
 function updateLeaderBoard(message){
+console.log("updating leaderboard");
     $("#first").empty();
     $("#second").empty();
     $("#third").empty();
     $("#fourth").empty();
     Object.keys(message).forEach(key => {
         addToLeaderBoard(key,message[key]);
-    }
-
+    });
 }
 function addToLeaderBoard(pos,playerInfo){
     $("#"+pos).append($("<td></td>").text(playerInfo["player"]));
@@ -124,7 +125,6 @@ function start(){
 }
 
 function replies(message){
-    console.log("in function replies:message received: "+message);
     if(id==1){
         if(message=="Not Enough Players!"){
             alert(message);
@@ -143,7 +143,6 @@ function finishTurn(){
     if($(".playArea").html()==""){
         alert("Play a Card!");
     }else{
-        console.log("sever sent: "+$(".pa").attr("src").slice(8,-4));
         stompClient.send("/app/playedCard",{},$(".pa").attr("src").slice(8,-4));
         $(".playArea").empty();
         $("#nextTurn").hide();
