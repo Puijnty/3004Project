@@ -29,9 +29,32 @@ function connect() {
         stompClient.subscribe('/game/score', function (message) {
             updateLeaderBoard(JSON.parse(message.body));
         });
+         stompClient.subscribe('/game/story', function (message) {
+                    updateStory(JSON.parse(message.body));
+                });
      });
  }
 
+function updateStory(message){
+    if(message["card"]!=null){
+        $("#story").empty();
+        let value = message["card"];
+        var img = $("<img>");
+        img.attr("src","/images/"+value+".png");
+        img.addClass("card");
+        $("#story").append(img);
+    }else{
+        $("#stage").empty();
+           Object.keys(message).forEach(key => {
+           let value = message[key];
+           var img = $("<img>");
+           img.attr("src","/images/"+value+".png");
+           img.addClass("card");
+           $("#stage").append(img);
+           });
+    }
+
+}
 function takeTurn(message){
     if(message.id==id){
         if(!message.turn){
@@ -125,17 +148,18 @@ function start(){
 }
 
 function replies(message){
-    if(id==1){
+
         if(message=="Not Enough Players!"){
-            alert(message);
+            if(id==1){
+                alert(message);
+                return;
+            }
         }
-    }
-    if(message=="Game Started!"){
-        if(id==1){
+        if(message=="Game Started!"){
             $("#start").hide();
         }
         alert(message);
-    }
+
 }
 
 

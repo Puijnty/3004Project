@@ -8,6 +8,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import project.TimYuyaoRyan.src.models.Card;
 import project.TimYuyaoRyan.src.models.CardDeck;
 import project.TimYuyaoRyan.src.models.PlayerInfo;
 import project.TimYuyaoRyan.src.services.GameMaster;
@@ -87,8 +88,14 @@ public class SocketMessagingController {
                 "{\"id\":" +p.getId()+ ",\"turn\":" +p.isTurn() + ",\"type\":"+type+",\"message\":\""+message + "\",\"cards\":"+p.getHand()+"}");
     }
 
-    public static void StartMessage(){
-        template.convertAndSend("/game/Reply","Game Started!");
+    public static void sendMessage(String message){
+        template.convertAndSend("/game/Reply",message);
     }
 
+    public static void sendStoryCard(Card c){
+        template.convertAndSend("/game/story","{\"card\":\""+c.getTitle()+"\"}");
+    }
+    public static void sendStageDeck(CardDeck deck){
+        template.convertAndSend("/game/story",deck.toString());
+    }
 }

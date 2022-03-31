@@ -12,6 +12,10 @@
 }
 
 .storyArea{
+    top: 30%;
+    left:5%;
+    position: absolute;
+    text-align: center;
 }
 
 .leaderboard{

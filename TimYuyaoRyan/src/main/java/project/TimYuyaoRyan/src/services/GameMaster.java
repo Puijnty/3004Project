@@ -82,7 +82,7 @@ public class GameMaster {
         }
         currentTurn = 0;
         //Game setup complete, begin main loop.
-        SocketMessagingController.StartMessage();
+        SocketMessagingController.sendMessage("Game Started!");
         run();
 
     }
@@ -124,7 +124,7 @@ public class GameMaster {
                         sponsorRequest -= players.size();
                     }
                     //players.get(sponsorRequest);
-                    String message = ("Player " + sponsorRequest + ", would you like to sponsor this quest?");
+                    String message = ("Player " + players.get(sponsorRequest).getId()+ ", would you like to sponsor this quest?");
                     boolean playerSponsors = GetCont(message, players.get(sponsorRequest));
                     if(playerSponsors && players.get(sponsorRequest).countQuestComponents() >= stages){
                         sponsor = sponsorRequest;
@@ -132,6 +132,7 @@ public class GameMaster {
                     }
                     else if(playerSponsors){
                         System.out.println("This player does not have enough foe and tests to sponsor this quest!");
+                        SocketMessagingController.sendMessage("This player does not have enough foe and tests to sponsor this quest!");
                     }
                 }
 
@@ -146,6 +147,7 @@ public class GameMaster {
                             stageCard = players.get(sponsor).getCard(temp);
                             if(stageCard.getType() == "test" && testBool){
                                 System.out.println("Two tests cannot be played in the same quest!");
+                                SocketMessagingController.sendMessage("Two tests cannot be played in the same quest!");
                                 stageCard = c;
                             }
                         }
@@ -181,6 +183,7 @@ public class GameMaster {
                             if(temp){
                                 //Will only fire if the player wishes to play a weapon and has none in hand
                                 System.out.println("No weapons left in hand!");
+                                SocketMessagingController.sendMessage("No weapons left in hand!");
                             }
                         }
                     }
@@ -206,6 +209,7 @@ public class GameMaster {
                             //At each stage of the quest, each participant still in the quest draws a card
                             CheckDeck(advDeck);
                             players.get(questers.get(j)).give(advDeck.draw());
+                            SocketMessagingController.sendHand(players.get(questers.get(j)));
                             System.out.println("Successfully did card draw");
                         }
 
