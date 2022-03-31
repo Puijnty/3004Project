@@ -49,7 +49,7 @@ function updateDiscard(deck){
 console.log(deck);
     $("#pile").empty();
     Object.keys(deck).forEach(key => {
-          let value = hand[key];
+          let value = deck[key];
           var img = $("<img>");
           img.attr("src","/images/"+value+".png");
           img.addClass("card");

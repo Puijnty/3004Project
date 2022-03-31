@@ -750,13 +750,17 @@ public class GameMaster {
             shields[i] = players.get(i).getShields();
             player[i]=-1;
         }
-
         Arrays.sort(shields);
+        int[] tmp = new int[players.size()];
+        for(int i = 0;i<players.size();i++){
+            tmp[players.size()-1-i] = shields[i];
+        }
+        shields=tmp;
         for (int i = 0; i < players.size(); i++) {
             for(int j=0; j<players.size();j++){
-                if(shields[i]==players.get(j).getShields()){
-                    if(player[i]==-1) {
-                        player[i] = players.get(j).getId();
+                if(shields[j]==players.get(i).getShields()){
+                    if(player[j]==-1) {
+                        player[j] = players.get(i).getId();
                         break;
                     }
                 }
