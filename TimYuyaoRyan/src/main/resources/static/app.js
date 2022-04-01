@@ -38,6 +38,7 @@ function connect() {
 function updateStory(message){
     if(message["card"]!=null){
         $("#story").empty();
+        $("#stage").empty();
         let value = message["card"];
         var img = $("<img>");
         img.attr("src","/images/"+value+".png");
