@@ -104,6 +104,7 @@ public class GameMaster {
             CheckDeck(storyDeck);
             Card c = storyDeck.draw();
             CardDeck stageDeck = new CardDeck();
+            SocketMessagingController.sendStoryCard(c);
 
             if(c.getType() == "quest"){
                 int sponsorCards = 0;
@@ -204,6 +205,7 @@ public class GameMaster {
                     for (int i = 0; i < stages; i++) {
                         Card stageCard = stageDeck.next();
                         stageDeck.remove(stageCard.getTitle());
+                        SocketMessagingController.sendStageDeck(stageDeck);
 
                         for (int j = 0; j < questers.size(); j++) {
                             //At each stage of the quest, each participant still in the quest draws a card
@@ -397,7 +399,7 @@ public class GameMaster {
 
                     //Everyone plays their cards
                     for (int i = 0; i < participants.size(); i++) {
-                        String message = ("Would you like to play a card? (player " + players.get(participants.get(i)) + ")");
+                        String message = ("Would you like to play a card?");
                         boolean temp = GetCont(message, players.get(participants.get(i)));
                         while(temp && players.get(participants.get(i)).countBattle() >= 1) {
                             //Allows the attachment of multiple weapons
@@ -452,7 +454,7 @@ public class GameMaster {
 
                         //Do the whole 'play your cards' thing again
                         for (int i = 0; i < participants.size(); i++) {
-                            String message = ("Would you like to play a card? (player " + players.get(participants.get(i)) + ")");
+                            String message = ("Would you like to play a card?");
                             boolean temp = GetCont(message, players.get(participants.get(i)));
                             while(temp && players.get(participants.get(i)).countBattle() >= 1) {
                                 //Allows the attachment of multiple weapons
@@ -499,7 +501,7 @@ public class GameMaster {
                             }
                         }
                         if(participants.size() == 1){
-                            System.out.println("Player " + players.get(participants.get(0)) + " is victorious! They earn " + (c.getPotency() + originalParticipants) + " shields!");
+                            System.out.println("Player " + " is victorious! They earn " + (c.getPotency() + originalParticipants) + " shields!");
                         }
                         else{
                             System.out.println("The tiebreaker round is still a tie! All participants that won this round earn " + originalParticipants + " shields!");
