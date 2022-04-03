@@ -292,10 +292,10 @@ public class GameMaster {
                                 if (temp && players.get(questers.get(0)).countMaxBid() > minBid) {
                                     int removedCards = players.get(questers.get(0)).countFreeBid();
                                     while(removedCards <= minBid){
-                                        message = (removedCards + "/" + (minBid+1) + " bids complete.\n");
-                                        message+=("Please select a card to remove, player " + players.get(questers.get(0)));
+                                        message = (removedCards + "/" + (minBid+1) + " bids complete. Please select a card to remove.");
                                         message = GetPlayedCardName(message, players.get(questers.get(0)));
-                                        discardDeck.add(players.get(questers.get(0)).remove(message));
+                                        Card discarded = players.get(questers.get(0)).getCard(message);
+                                        discardDeck.add(players.get(questers.get(0)).remove(discarded.getTitle()));
                                         SocketMessagingController.sendDiscard(discardDeck);
                                         removedCards++;
                                         //Add something to verify that the cards are being properly removed here
@@ -316,10 +316,10 @@ public class GameMaster {
                                     if (temp && players.get(questers.get(j)).countMaxBid() > minBid) {
                                         int removedCards = players.get(questers.get(j)).countFreeBid();
                                         while(removedCards <= minBid){
-                                            message = (removedCards + "/" + (minBid+1) + " bids complete.\n");
-                                            message += ("Please select a card to remove, player " + players.get(questers.get(j)));
+                                            message = (removedCards + "/" + (minBid) + " bids complete. Please select a card to remove.");
                                             message = GetPlayedCardName(message, players.get(questers.get(j)));
-                                            discardDeck.add(players.get(questers.get(j)).remove(message));
+                                            Card discarded = players.get(questers.get(j)).getCard(message);
+                                            discardDeck.add(players.get(questers.get(j)).remove(discarded.getTitle()));
                                             SocketMessagingController.sendDiscard(discardDeck);
                                         }
                                         minBid++;
