@@ -92,6 +92,20 @@ public class GameMaster {
         if(currentTurn >= players.size()){
             currentTurn = 0;
         }
+
+        boolean winner = false;
+        //Check if someone has won the game
+        for (int i = 0; i < players.size(); i++) {
+            if(players.get(i).getShields() >= 5){
+                System.out.println("Player " + i + " promotes to knight and wins!");
+                winner = true;
+            }
+        }
+
+        if(winner){
+            calculateLeaderboard();
+
+        }
     }
 
     public void run(){
@@ -448,6 +462,7 @@ public class GameMaster {
                     }
                     if(participants.size() == 1){
                         System.out.println("Player " + players.get(participants.get(0)) + " is victorious! They earn " + (c.getPotency() + originalParticipants) + " shields!");
+                        players.get(participants.get(0)).award(c.getPotency() + originalParticipants);
                     }
                     else{
                         //Tiebreaker
@@ -502,6 +517,7 @@ public class GameMaster {
                         }
                         if(participants.size() == 1){
                             System.out.println("Player " + " is victorious! They earn " + (c.getPotency() + originalParticipants) + " shields!");
+                            players.get(participants.get(0)).award(c.getPotency() + originalParticipants);
                         }
                         else{
                             System.out.println("The tiebreaker round is still a tie! All participants that won this round earn " + originalParticipants + " shields!");
